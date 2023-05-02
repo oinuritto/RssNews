@@ -50,7 +50,7 @@ public class SecurityConfig {
                         .passwordParameter("password")
                         .defaultSuccessUrl("/profile").failureUrl("/login?error")
                         .and()
-                        .logout().logoutUrl("/logout")
+                        .logout().logoutUrl("/logout").logoutSuccessUrl("/")
                         .and().build();
     }
 
