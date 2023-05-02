@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Include Header   -->
+    <th:block th:replace="~{fragments/header :: head}"/>
+    <title>Registration</title>
+</head>
+<body>
+<!-- Include navbar -->
+<th:block th:replace="~{fragments/header :: navbar}"></th:block>
+
+
+<div class="container" style="min-height: 78vh;">
+    <div class="text-center">
+        <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Registration</h3>
+    </div>
+
+    <form th:action="@{/register}" th:object="${signUpDto}" method="post">
+        <div class="row justify-content-center">
+            <div class="col-md-6 mb-3">
+                <div class="form-outline">
+                    <label class="form-label" for="firstName">First Name</label>
+                    <input class="form-control form-control-md" type="text" th:field="*{firstName}" id="firstName"
+                           required/>
+                    <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="form-outline">
+                    <label class="form-label" for="lastName">Last Name</label>
+                    <input class="form-control form-control-md" type="text" th:field="*{lastName}" id="lastName"
+                           required/>
+                    <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-12 mb-3">
+                <div class="form-outline">
+                    <label class="form-label" for="email">Email</label>
+                    <input class="form-control form-control-md" type="email" th:field="*{email}" id="email" required/>
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-12 mb-3">
+                <div class="form-outline">
+                    <label class="form-label" for="password">Password</label>
+                    <input class="form-control form-control-md" type="password" th:field="*{password}" id="password"
+                           required/>
+                    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" th:field="*{isAcceptedPolicyAgreement}"
+                   id="isAcceptedPolicyAgreement" required/>
+            <label class="form-check-label" for="isAcceptedPolicyAgreement">I accept the policy agreement</label>
+            <span th:if="${#fields.hasErrors('isAcceptedPolicyAgreement')}" th:errors="*{isAcceptedPolicyAgreement}"
+                  class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-md mb-3">Sign Up</button>
+    </form>
+</div>
+
+
+<!--  Include footer-->
+<th:block th:replace="~{fragments/footer :: footer}"/>
+
+</body>
+</html>

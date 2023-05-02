@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:fragment="head">
+        <meta charset="UTF-8">
+        <!-- icons -->
+        <link rel="apple-touch-icon" sizes="180x180" th:href="@{/img/icon/apple-touch-icon.png}"/>
+        <link rel="icon" type="image/png" sizes="32x32" th:href="@{/img/icon/favicon-32x32.png}"/>
+        <link rel="icon" type="image/png" sizes="16x16" th:href="@{/img/icon/favicon-16x16.png}"/>
+        <link rel="manifest" th:href="@{/img/icon/site.webmanifest}"/>
+
+        <!-- css -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+              crossorigin="anonymous">
+
+        <!-- js -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+                crossorigin="anonymous"></script>
+
+    </th:block>
+</head>
+<body class="bg-light">
+<!-- Include NavBar -->
+<!--<div th:replace="parts/navbar :: navbar"></div>-->
+<nav th:fragment="navbar" class="navbar sticky-top navbar-expand-md navbar-light p-3"
+     style="background-color: #f1f1f1;">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">Rss News</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+
+            <!-- TODO: сделать поиск -->
+            <form class="d-flex" method="get" th:action="@{/}">
+                <input id="search-input" class="form-control mr-sm-2" type="search" placeholder="Search news"
+                       aria-label="Search" name="query">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+
+            <ul class="navbar-nav ms-auto ">
+                <li class="nav-item">
+                    <a class="nav-link mx-2 active" aria-current="page" th:href="@{/users}">Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2 active" aria-current="page" th:href="@{/}">Home</a>
+                </li>
+
+                <!-- Если авторизован -->
+                <th:block th:if="${user != null}">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLinkAuthorized"
+                           role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-people-fill"></i>
+                            <th:block th:text="${user.username}"/>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkAuthorized">
+                            <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
+                            <li><a class="dropdown-item" th:href="@{/users/posts?id=${user.id}}">My posts</a></li>
+                            <li><a class="dropdown-item" th:href="@{/newRss}">Add news link</a></li>
+                            <li><a class="dropdown-item" th:href="@{/logout}">Log out</a></li>
+                        </ul>
+                    </li>
+                </th:block>
+                <!-- Если авторизован -->
+
+                <!-- Если не авторизован -->
+                <th:block th:if="${user == null}">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLinkNotAuthorized"
+                           role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-people-fill"></i>
+                            Account
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkNotAuthorized">
+                            <li><a class="dropdown-item" th:href="@{/login}">Log in</a></li>
+                            <li><a class="dropdown-item" th:href="@{/register}">Registration</a></li>
+                            <!--                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#authModal">Log in</a></li>-->
+                            <!--                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Registration</a></li>-->
+                        </ul>
+                    </li>
+                </th:block>
+                <!-- Если не авторизован -->
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Include ModalAuthAndRegister -->
+<!--<div th:replace="parts/modalAuthAndRegister :: modalAuthAndRegister"></div>-->
+
+<br>
+<div class="container" style="min-height: 71.5vh;">
+
+</div>
+</body>
+</html>

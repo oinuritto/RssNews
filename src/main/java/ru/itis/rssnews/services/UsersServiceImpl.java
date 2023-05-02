@@ -1,7 +1,7 @@
 package ru.itis.rssnews.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.itis.rssnews.dto.SignUpDto;
 import ru.itis.rssnews.models.Role;
@@ -13,7 +13,7 @@ import ru.itis.rssnews.repositories.UsersRepository;
 @RequiredArgsConstructor
 public class UsersServiceImpl implements UsersService {
     private final UsersRepository usersRepository;
-    private final PasswordEncoder passwordEncoder;
+//    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void register(SignUpDto signUpDto) {
@@ -22,7 +22,8 @@ public class UsersServiceImpl implements UsersService {
 
         usersRepository.save(User.builder()
                 .email(signUpDto.getEmail())
-                .password(passwordEncoder.encode(signUpDto.getPassword()))
+//                .password(passwordEncoder.encode(signUpDto.getPassword()))
+                .password(signUpDto.getPassword())
                 .firstName(signUpDto.getFirstName())
                 .lastName(signUpDto.getLastName())
                 .role(Role.USER)
