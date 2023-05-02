@@ -22,6 +22,7 @@ public class SignUpDto {
     @NotBlank
     private String lastName;
 
+    @NotBlank
     @Email
     private String email;
 
