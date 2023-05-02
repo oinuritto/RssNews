@@ -2,6 +2,7 @@ package ru.itis.rssnews.services;
 
 import lombok.RequiredArgsConstructor;
 //import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import ru.itis.rssnews.dto.SignUpDto;
 import ru.itis.rssnews.models.Role;
@@ -18,7 +19,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public void register(SignUpDto signUpDto) {
         if (usersRepository.existsUserByEmail(signUpDto.getEmail()))
-            throw new IllegalArgumentException("User with email = <" + signUpDto.getEmail() + "> is exist");
+            throw new DuplicateKeyException("User with this email is exist");
 
         usersRepository.save(User.builder()
                 .email(signUpDto.getEmail())

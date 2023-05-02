@@ -2,6 +2,7 @@ package ru.itis.rssnews.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,7 +29,12 @@ public class RegistrationController {
         if (result.hasErrors()) {
             return "registration";
         }
-        usersService.register(signUpDto);
+        try {
+            usersService.register(signUpDto);
+        } catch (DuplicateKeyException ex) {
+            result.rejectValue("email", "entry.duplicate", ex.getMessage());
+            return "registration";
+        }
         return "redirect:/login";
     }
 }
