@@ -1,11 +1,12 @@
 package ru.itis.rssnews.services;
 
 import lombok.RequiredArgsConstructor;
-//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.itis.rssnews.dto.SignUpDto;
+import ru.itis.rssnews.dto.UserDto;
+import ru.itis.rssnews.exceptions.NotFoundException;
 import ru.itis.rssnews.models.Role;
 import ru.itis.rssnews.models.User;
 import ru.itis.rssnews.repositories.UsersRepository;
@@ -30,5 +31,15 @@ public class UsersServiceImpl implements UsersService {
                 .lastName(signUpDto.getLastName())
                 .role(Role.USER)
                 .build());
+    }
+
+    @Override
+    public UserDto getUserByEmail(String email) {
+        return UserDto.from(getUserOrElseThrow(email));
+    }
+
+    private User getUserOrElseThrow(String email) {
+        return usersRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User with email = <" + email + "> is not found"));
     }
 }
