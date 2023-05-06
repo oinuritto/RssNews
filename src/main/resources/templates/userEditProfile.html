@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <!-- Include Header   -->
+    <th:block th:replace="~{fragments/header :: head}"/>
+    <title>Login Page</title>
+</head>
+
+<body>
+<!-- Include navbar -->
+<th:block th:replace="~{fragments/header :: navbar}"></th:block>
+
+<div class="container">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-12 col-lg-9 col-xl-7">
+            <div class="card" style="border-radius: 15px;">
+                <div class="card-body p-2 p-md-3">
+                    <th:block th:if="${message}">
+                        <h4 class="mb-4 pb-2 pb-md-0 mb-md-5" th:text="${message}"></h4>
+                    </th:block>
+                    <div class="text-center">
+                        <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Profile Edit</h3>
+                    </div>
+
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-9">
+                                            <form th:object="${updateUserDto}" method="post">
+                                                <div class="row justify-content-center">
+                                                    <!--                                                    <div class="col-md-6 mb-3">-->
+                                                    <!--                                                        <div class="form-outline">-->
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="email">Email</label>
+                                                        <input th:field="*{email}" id="email"
+                                                               class="form-control form-control-sm mr-sm-2"
+                                                               type="text"
+                                                               name="email"/>
+                                                        <span th:if="${#fields.hasErrors('email')}"
+                                                              th:errors="*{email}"
+                                                              class="text-danger"></span>
+                                                    </div>
+                                                    <!--                                                    </div>-->
+
+                                                    <!--                                                    <div class="col-md-6 mb-3">-->
+                                                    <!--                                                        <div class="form-outline">-->
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="firstName">First Name</label>
+                                                        <input th:field="*{firstName}" id="firstName"
+                                                               class="form-control form-control-sm mr-sm-2"
+                                                               type="text"
+                                                               name="firstName" placeholder="New first name..."/>
+                                                        <span th:if="${#fields.hasErrors('firstName')}"
+                                                              th:errors="*{firstName}" class="text-danger"></span>
+                                                    </div>
+                                                    <!--                                                    </div>-->
+
+                                                    <!--                                                    <div class="col-md-6 mb-3">-->
+                                                    <!--                                                        <div class="form-outline">-->
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="lastName">Last Name</label>
+                                                        <input th:field="*{lastName}" id="lastName"
+                                                               class="form-control form-control-sm mr-sm-2"
+                                                               type="text"
+                                                               name="lastName" placeholder="New last name..."/>
+                                                        <span th:if="${#fields.hasErrors('lastName')}"
+                                                              th:errors="*{lastName}" class="text-danger"></span>
+                                                    </div>
+                                                    <!--                                                    </div>-->
+
+                                                    <!--                                                    <div class="col-md-6 mb-3">-->
+                                                    <!--                                                        <div class="form-outline">-->
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="password">New
+                                                            password</label>
+                                                        <input th:field="*{password}" id="password"
+                                                               class="form-control form-control-sm mr-sm-2"
+                                                               type="password"
+                                                               name="password" placeholder="New password..."/>
+                                                        <span th:if="${#fields.hasErrors('password')}"
+                                                              th:errors="*{password}" class="text-danger"></span>
+                                                    </div>
+                                                    <!--                                                    </div>-->
+
+                                                    <!--                                                    <div class="col-md-6 mb-3">-->
+                                                    <!--                                                        <div class="form-outline">-->
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="confirmPassword">Confirm
+                                                            password</label>
+                                                        <input th:field="*{confirmPassword}" id="confirmPassword"
+                                                               class="form-control form-control-sm mr-sm-2"
+                                                               type="password"
+                                                               name="confirmPassword"
+                                                               placeholder="Confirm password..."/>
+                                                        <span th:if="${#fields.hasErrors('password')}"
+                                                              th:errors="*{password}" class="text-danger"></span>
+                                                    </div>
+                                                    <!--                                                    </div>-->
+                                                    <div class="form-group">
+                                                        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                                                        <button type="submit" class="btn btn-primary btn-md mb-2 mt-2">
+                                                            Edit
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="mt-4 pt-2">
+                                <a th:href="@{/profile}">
+                                    <button class="btn btn-primary btn-lg">Profile</button>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <div class="mt-4 pt-2">
+                                <button class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                                        data-bs-target="#deleteAccountModal">Delete account
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal delete account -->
+    <div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteAccountModalLabel">Account deleting</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure want to delete your account?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <form th:action="@{/profile/delete}" method="post">
+                        <input type="hidden" name="isDeleteAccepted" value="true"/>
+                        <input type="submit" class="btn btn-primary" value="Yes"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--  Include footer-->
+<th:block th:replace="~{fragments/footer :: footer}"/>
+</body>
+</html>
