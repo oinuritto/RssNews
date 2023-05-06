@@ -31,7 +31,7 @@ public class Article {
     @Column(nullable = false)
     private String category;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "source_id")
     private RssSource source;
 }

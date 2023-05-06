@@ -20,4 +20,6 @@ public class RssNewsApplication {
         return new BCryptPasswordEncoder(value);
     }
 
+
+
 }
