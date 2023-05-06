@@ -1,5 +1,7 @@
 package ru.itis.rssnews.services;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
@@ -8,8 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 import ru.itis.rssnews.dto.SignUpDto;
 import ru.itis.rssnews.dto.UpdateUserDto;
@@ -28,6 +30,8 @@ import ru.itis.rssnews.security.details.UserDetailsImpl;
 public class UsersServiceImpl implements UsersService {
     private final UsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
+    private final HttpServletRequest request;
+    private final HttpServletResponse response;
 
     @Value("${default.page-size}")
     private int defaultPageSize;
@@ -109,6 +113,13 @@ public class UsersServiceImpl implements UsersService {
     public void deleteUser(String email) {
         User user = getUserOrElseThrow(email);
         usersRepository.deleteById(user.getId());
+        // Получаем текущий контекст безопасности
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        // Если пользователь был аутентифицирован, то очищаем его данные аутентификации
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+
     }
 
     private User getUserOrElseThrow(String email) {
