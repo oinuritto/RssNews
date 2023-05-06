@@ -1,22 +1,32 @@
 package ru.itis.rssnews.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.itis.rssnews.models.Role;
-import ru.itis.rssnews.models.User;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UpdatedUserDto {
-    private String firstName;
-    private String lastName;
+public class UpdateUserDto {
+    @Size(min = 6, max = 32)
+    @NotBlank
     private String email;
+
+    @Size(min = 2, max = 32)
+    @NotBlank
+    private String firstName;
+
+    @Size(min = 2, max = 32)
+    @NotBlank
+    private String lastName;
+
     private String password;
-    private Role role;
+
+    private String confirmPassword;
 
 //    public static UpdatedUserDto from(User user) {
 //        return UpdatedUserDto.builder()
