@@ -8,8 +8,8 @@ import ru.itis.rssnews.models.Article;
 import java.util.Optional;
 
 @Repository
+@Transactional
 public interface ArticlesRepository extends JpaRepository<Article, Long> {
     Optional<Article> findByLink(String link);
-    @Transactional
-    void deleteArticlesBySourceId(Long id);
+    void deleteBySourceId(Long id);
 }

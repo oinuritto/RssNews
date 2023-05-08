@@ -1,18 +1,11 @@
 package ru.itis.rssnews.services;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import ru.itis.rssnews.repositories.ArticlesRepository;
-import ru.itis.rssnews.repositories.RssSourcesRepositoryClearJpa;
+import ru.itis.rssnews.models.RssSource;
 
-@Service
-@RequiredArgsConstructor
-public class RssSourcesService {
-    private final ArticlesRepository articlesRepository;
-    private final RssSourcesRepositoryClearJpa sourcesRepository;
+import java.util.List;
 
-    public void deleteById(Long sourceId) {
-        articlesRepository.deleteArticlesBySourceId(sourceId);
-        sourcesRepository.deleteBySourceId(sourceId);
-    }
+public interface RssSourcesService {
+    void deleteById(Long sourceId);
+
+    List<RssSource> getAllSources();
 }

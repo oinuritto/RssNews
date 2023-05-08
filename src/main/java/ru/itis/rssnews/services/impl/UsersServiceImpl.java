@@ -1,4 +1,4 @@
-package ru.itis.rssnews.services;
+package ru.itis.rssnews.services.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,6 +23,7 @@ import ru.itis.rssnews.models.Role;
 import ru.itis.rssnews.models.User;
 import ru.itis.rssnews.repositories.UsersRepository;
 import ru.itis.rssnews.security.details.UserDetailsImpl;
+import ru.itis.rssnews.services.UsersService;
 
 
 @Service
