@@ -5,21 +5,74 @@
     <title>Title</title>
 </head>
 <body>
+<!-- footer fragment -->
 <footer th:fragment="footer" class="text-center" style="background-color: #f1f1f1;">
+    <div class="text-center p-3">
+        2023 :
+        <a class="text-dark" th:href="@{/}">Rss News</a>
 
-  <div class="text-center p-3">
-    2023 :
-    <a class="text-dark" th:href="@{/}">Rss News</a>
-
-    <a
-            class="btn btn-link btn-floating btn-lg text-dark m-1"
-            href="https://github.com/oinuritto"
-            role="button"
-            data-mdb-ripple-color="dark">
-      <i class="bi-github" role="img" aria-label="GitHub"></i>
-    </a>
-  </div>
-
+        <a
+                class="btn btn-link btn-floating btn-lg text-dark m-1"
+                href="https://github.com/oinuritto"
+                role="button"
+                data-mdb-ripple-color="dark">
+            <i class="bi-github" role="img" aria-label="GitHub"></i>
+        </a>
+    </div>
 </footer>
+
+<!-- Pagination fragment -->
+<th:block th:if="${pagesCount != 0}" th:fragment="pagination">
+    <nav aria-label="..." class="d-flex justify-content-center align-self-end">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${page == 1}? 'disabled' : ''">
+                <a class="page-link" th:href="@{/(page=${page - 1})}" tabindex="-1"> Previous</a>
+            </li>
+            <th:block th:if="${page > 2}">
+                <li class="page-item">
+                    <a class="page-link" th:href="@{/(page=1)}">1</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" th:href="@{/(page=2)}">2</a>
+                </li>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">
+                        ...</a>
+                </li>
+            </th:block>
+            <li class="page-item active">
+                <a class="page-link" th:href="@{/(page=${page})}" th:text="${page}"></a>
+            </li>
+
+
+            <th:block th:if="${pagesCount >= page + 1}">
+                <li class="page-item" aria-current="page">
+                    <a class="page-link" th:href="@{/(page=${page+1})}" th:text="${page+1}"></a>
+                </li>
+            </th:block>
+            <th:block th:if="${pagesCount >= page + 2}">
+                <li class="page-item">
+                    <a class="page-link" th:href="@{/(page=${page+2})}" th:text="${page+2}"></a>
+                </li>
+            </th:block>
+
+            <th:block th:if="${pagesCount > page + 2}">
+                <th:block th:if="${pagesCount > page + 3}">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">
+                            ...</a>
+                    </li>
+                </th:block>
+                <li class="page-item">
+                    <a class="page-link" th:href="@{/(page=${pagesCount})}" th:text="${pagesCount}"></a>
+                </li>
+            </th:block>
+
+            <li class="page-item" th:classappend="${page == pagesCount}? 'disabled' : ''">
+                <a class="page-link" th:href="@{/(page=${page+1})}">Next</a>
+            </li>
+        </ul>
+    </nav>
+</th:block>
 </body>
 </html>

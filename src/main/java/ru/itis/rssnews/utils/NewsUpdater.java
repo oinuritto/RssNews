@@ -32,7 +32,6 @@ public class NewsUpdater {
         // обновление новостей в БД
         try {
             List<RssSource> sources = rssSourcesService.getAllSources();
-            System.out.println(sources);
 
             for (RssSource source: sources) {
                 List<Article> articles = articlesParser.parse(source); // Парсинг новостей из XML-документа

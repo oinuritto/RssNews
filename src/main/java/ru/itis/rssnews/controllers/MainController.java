@@ -16,18 +16,18 @@ public class MainController {
     private final ArticlesService articlesService;
 
     @GetMapping("/")
-    public String getMainPage(@RequestParam(value = "page", required = false) String page, ModelMap modelMap) {
-        int intPage;
+    public String getMainPage(@RequestParam(value = "page", defaultValue = "1") String pageStr, ModelMap modelMap) {
+        int page;
         try {
-            intPage = Integer.parseInt(page);
+            page = Integer.parseInt(pageStr);
         } catch (NumberFormatException ex) {
-            intPage = 1;
+            page = 1;
         }
 
-        ArticlesPage articlesPage = articlesService.getAll(intPage);
+        ArticlesPage articlesPage = articlesService.getAll(page);
         modelMap.put("articles", articlesPage.getArticles());
         modelMap.put("pagesCount", articlesPage.getTotalPagesCount());
-        modelMap.put("page", intPage);
+        modelMap.put("page", page);
         return "index";
     }
 

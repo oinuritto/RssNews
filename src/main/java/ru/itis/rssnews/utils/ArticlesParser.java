@@ -21,7 +21,6 @@ public class ArticlesParser {
         Document doc = Jsoup.parse(new URL(source.getSource()).openStream(), "UTF-8", "",
                 Parser.xmlParser());
 
-        System.out.println(source.getSource());
 
         Elements items = doc.select("item");
         for (Element item : items) {
@@ -41,7 +40,6 @@ public class ArticlesParser {
 
             newsItems.add(newsItem);
         }
-        System.out.println(newsItems.get(0));
         return newsItems;
     }
 }

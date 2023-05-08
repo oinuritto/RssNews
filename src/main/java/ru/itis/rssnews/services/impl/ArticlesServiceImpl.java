@@ -27,7 +27,7 @@ public class ArticlesServiceImpl implements ArticlesService {
 
     @Override
     public ArticlesPage getAll(int page) {
-        PageRequest pageRequest = PageRequest.of(page, defaultPageSize);
+        PageRequest pageRequest = PageRequest.of(page - 1, defaultPageSize);
         Page<Article> articlesPage = articlesRepository.findAllByOrderByIdAsc(pageRequest);
 
         return ArticlesPage.builder()
