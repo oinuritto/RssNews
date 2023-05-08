@@ -34,7 +34,7 @@ public class UsersServiceImpl implements UsersService {
     private final HttpServletRequest request;
     private final HttpServletResponse response;
 
-    @Value("${default.page-size}")
+    @Value("${users.default.page-size}")
     private int defaultPageSize;
 
     @Override
