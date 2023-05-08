@@ -31,6 +31,8 @@ public class Article {
     @Column(nullable = false)
     private String category;
 
+    private String imageLink;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "source_id")
     private RssSource source;

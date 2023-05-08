@@ -29,12 +29,15 @@ public class ArticlesParser {
             String description = item.select("description").first().text();
             String pubDate = item.select("pubDate").first().text();
             String category = item.select("category").first().text();
+            String imageLink = item.select("enclosure").attr("url");
+
             Article newsItem = Article.builder()
                     .title(title)
                     .link(link)
                     .description(description)
                     .pubDate(pubDate)
                     .category(category)
+                    .imageLink(!imageLink.equals("") ? imageLink : null)
                     .source(source)
                     .build();
 
