@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <!-- Include Header   -->
+    <th:block th:replace="~{fragments/header :: head}"/>
+    <title>RSS Sources</title>
+</head>
+<body>
+<!-- Include navbar -->
+<th:block th:replace="~{fragments/header :: navbar}"></th:block>
+
+<div class="container">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-12 col-lg-9 col-xl-7">
+            <div class="card" style="border-radius: 15px;">
+                <div class="card-body p-2 p-md-3">
+                    <div class="text-center">
+                        <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Rss Sources</h3>
+                    </div>
+
+                    <div class="card-subtitle">
+                        <form th:action="@{/rss/add}" method="post">
+                            <div class="form-group small">
+                                <label for="rss">RSS link</label>
+                                <input type="text" class="form-control" id="rss" name="url"
+                                       placeholder="Enter link">
+                                <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                                <button type="submit" class="btn btn-primary mb-2" id="addRss">Add</button>
+                            </div>
+                        </form>
+                        <p th:if="${message}" th:text="${message}"></p>
+                    </div>
+
+                    <table class="table table-hover">
+                        <thead class="table-primary">
+                        <tr>
+                            <th>ID</th>
+                            <th>Link</th>
+                            <th sec:authorize="hasAuthority('ADMIN')">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody id="usersTbody">
+                        <th:block th:each="source : ${rssSources}">
+                            <tr>
+                                <td th:text="${source.id}"></td>
+                                <td>
+                                    <a class="text-decoration-none" th:href="${source.source}"
+                                       th:text="${source.source}"></a>
+                                </td>
+                                <td sec:authorize="hasAuthority('ADMIN')">
+                                    <form th:action="@{/rss/delete/{id}(id = ${source.id})}" method="post">
+                                        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                                        <button type="submit" class="btn btn-primary btn-sm">Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </th:block>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:replace="~{fragments/footer :: pagination(url = '/rss')}"/>
+
+</div>
+
+<!--  Include footer-->
+<th:block th:replace="~{fragments/footer :: footer}"/>
+</body>
+</html>
