@@ -1,7 +1,6 @@
 package ru.itis.rssnews.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -31,7 +30,6 @@ public class MainController {
         return "index";
     }
 
-    @PreAuthorize("isAnonymous()")
     @GetMapping("/login")
     public String login(@RequestParam(required = false) String error, Model model) {
         if (error != null) {
@@ -40,7 +38,6 @@ public class MainController {
         return "login";
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/logout")
     public String logout() {
         return "logout";
