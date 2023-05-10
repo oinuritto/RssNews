@@ -54,7 +54,6 @@
                     </li>
 
                     <!-- Если авторизован -->
-                    <!--                <th:block th:if="${user != null}">-->
                     <th:block sec:authorize="isAuthenticated()">
                         <li class="nav-item dropdown">
                             <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLinkAuthorized"
@@ -66,7 +65,7 @@
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkAuthorized">
                                 <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
                                 <!--                            <li><a class="dropdown-item" th:href="@{/users/posts?id=${user.id}}">My posts</a></li>-->
-                                <li><a class="dropdown-item" th:href="@{/articles/newRss}">Add news link</a></li>
+                                <li><a class="dropdown-item" th:href="@{/rss}">Add news link</a></li>
                                 <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
                                        data-bs-target="#logoutModal">Log out</a></li>
                             </ul>
@@ -75,7 +74,6 @@
                     <!-- Если авторизован -->
 
                     <!-- Если не авторизован -->
-                    <!--                <th:block th:if="${user == null}">-->
                     <th:block sec:authorize="isAnonymous()">
                         <li class="nav-item dropdown">
                             <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLinkNotAuthorized"

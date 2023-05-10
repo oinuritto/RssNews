@@ -23,13 +23,6 @@ public class RssSourcesRepositoryClearJpa {
 
     @Transactional
     public void deleteById(Long id) {
-//        Query queryForArticlesDelete = em.createQuery("DELETE FROM articles a WHERE a.source = :source_id");
-//        Query queryForSourceDelete = em.createQuery("DELETE FROM sources r WHERE r.id = :source_id");
-//        queryForArticlesDelete.setParameter("source_id", sourceId);
-//        queryForSourceDelete.setParameter("source_id", sourceId);
-//        queryForArticlesDelete.executeUpdate();
-//        queryForSourceDelete.executeUpdate();
-
         Query query = em.createQuery("DELETE FROM sources r WHERE r.id = :source_id");
         query.setParameter("source_id", id);
         query.executeUpdate();

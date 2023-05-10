@@ -12,7 +12,9 @@ import ru.itis.rssnews.models.RssSource;
 import ru.itis.rssnews.services.ArticlesService;
 import ru.itis.rssnews.services.RssSourcesService;
 
+import javax.net.ssl.SSLHandshakeException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -37,7 +39,15 @@ public class NewsUpdater {
 
             for (RssSource source: sources) {
                 lastSource = source; // for catch block of try-catch
-                List<Article> articles = articlesParser.parse(source); // Парсинг новостей из XML-документа
+                List<Article> articles;
+
+                try {
+                    articles = articlesParser.parse(source); // Парсинг новостей из XML-документа
+                } catch (SSLHandshakeException ex) {
+                    logger.error("Cannot connect to: " + lastSource.getSource());
+                    continue;
+                }
+
                 // Обновление новостей в БД
                 for (Article article : articles) {
                     try {
@@ -47,6 +57,7 @@ public class NewsUpdater {
                     }
                 }
             }
+
             logger.info("Updating news end.");
 
         } catch (MalformedURLException ex) {
