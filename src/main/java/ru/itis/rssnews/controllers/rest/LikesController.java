@@ -3,9 +3,11 @@ package ru.itis.rssnews.controllers.rest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.itis.rssnews.dto.LikeDto;
 import ru.itis.rssnews.services.LikesService;
+import ru.itis.rssnews.services.UsersService;
 
 import java.util.List;
 
@@ -14,11 +16,20 @@ import java.util.List;
 @RequestMapping("/api/likes")
 public class LikesController {
     private final LikesService likesService;
+    private final UsersService usersService;
 
-    @PostMapping("/add")
-    public ResponseEntity<?> createLike(@RequestBody LikeDto likeDto) {
-        likesService.addLike(likeDto.getArticleId(), likeDto.getUserId());
-        return ResponseEntity.accepted().build();
+    @PostMapping("/add/{articleId}")
+    public ResponseEntity<?> createLike(Authentication authentication, @PathVariable Long articleId) {
+        // проверяем, что пользователь авторизован
+        if (authentication != null && authentication.isAuthenticated()) {
+            System.out.println(authentication.getName());
+            // добавляем лайк и возвращаем успешный ответ
+            likesService.addLike(articleId, usersService.getCurrentUser().getId());
+            return ResponseEntity.accepted().build();
+        } else {
+            // если пользователь не авторизован, возвращаем ошибку 401
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
     @GetMapping()
@@ -57,9 +68,16 @@ public class LikesController {
         return new ResponseEntity<>(like, HttpStatus.OK);
     }
 
-    @DeleteMapping("/article/{articleId}/user/{userId}")
-    public ResponseEntity<?> deleteLikeByArticleIdAndUserId(@PathVariable Long articleId, @PathVariable Long userId) {
-        likesService.deleteLikeByArticleIdAndUserId(articleId, userId);
-        return ResponseEntity.accepted().build();
+    @DeleteMapping("/article/{articleId}")
+    public ResponseEntity<?> deleteLikeByArticleId(@PathVariable Long articleId, Authentication authentication) {
+        // проверяем, что пользователь авторизован
+        if (authentication != null && authentication.isAuthenticated()) {
+            // удаляем лайк и возвращаем успешный ответ
+            likesService.deleteLikeByArticleIdAndUserId(articleId, usersService.getCurrentUser().getId());
+            return ResponseEntity.accepted().build();
+        } else {
+            // если пользователь не авторизован, возвращаем ошибку 401
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 }

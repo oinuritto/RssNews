@@ -1,4 +1,4 @@
-package ru.itis.rssnews.converter;
+package ru.itis.rssnews.converters;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;

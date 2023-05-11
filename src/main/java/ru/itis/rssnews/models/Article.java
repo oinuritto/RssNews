@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -36,4 +38,7 @@ public class Article {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "source_id")
     private RssSource source;
+
+    @OneToMany(mappedBy = "article")
+    private List<Like> likes;
 }

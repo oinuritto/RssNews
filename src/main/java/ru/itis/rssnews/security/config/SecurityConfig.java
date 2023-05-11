@@ -44,7 +44,7 @@ public class SecurityConfig {
                         .requestMatchers("/", "/error", "/rss", "/api/likes/**").permitAll()
                         .requestMatchers("/login", "/register").anonymous()
                         .requestMatchers(HttpMethod.DELETE, "/api/likes/**").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/likes/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/likes/add/**").authenticated()
                         .requestMatchers("/profile/**", "/logout", "/rss/add").authenticated()
                         .requestMatchers( "/adminPanel/**", "/rss/delete/**").hasAuthority("ADMIN")
                         .and()
@@ -55,7 +55,8 @@ public class SecurityConfig {
                         .passwordParameter("password")
                         .and()
                         .logout().logoutUrl("/logout").logoutSuccessUrl("/")
-                        .and().build();
+                        .and()
+                        .build();
     }
 
     @Autowired

@@ -5,6 +5,9 @@
     <!-- Include Header   -->
     <th:block th:replace="~{fragments/header :: head}"/>
     <title>Rss News</title>
+    <script defer type="text/javascript" th:src="@{/js/articles_likes.js}"></script>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
 <!-- Include navbar -->
@@ -12,6 +15,9 @@
 
 
 <div class="container">
+    <th:block sec:authorize="isAuthenticated()">
+        <input type="hidden" class="userId" th:id="${currentUser.id}">
+    </th:block>
     <th:block th:each="article : ${articles}">
         <div class="card m-auto" style="width: 30rem;">
             <div th:if="${article.imageLink != null}">
@@ -24,14 +30,14 @@
                 <h6 class="card-subtitle mb-2 text-muted text-sm-end" th:text="${article.pubDate}"></h6>
                 <a th:href="${article.link}" class="btn btn-primary btn-sm">Go to the news</a>
                 <a th:href="${article.getSource().getSource()}" class="btn btn-primary btn-sm">Go to RSS source</a>
-<!--                <p id="liked-article-[[${article.id}]]" class="btn btn-link btn-floating btn-lg"-->
-<!--                   role="button" data-mdb-ripple-color="dark"-->
-<!--                   th:onclick="workWithLike([[${article.id}]]);">-->
-<!--                    <input type="hidden" id="articleId" value="articleId">-->
-<!--                    <i th:id="'likedCount-article-' + ${article.id}" class="bi bi-hand-thumbs-up"-->
-<!--                       th:text="${#numbers.formatInteger(article.likes.size())}"></i>-->
-<!--                    <input type="hidden" id="ifLiked-article-[[${article.id}]]" th:value="nonLiked">-->
-<!--                </p>-->
+                <th:block>
+                    <p th:id="'liked-article-' + ${article.id}" class="btn btn-link btn-floating btn-lg like-button"
+                       role="button" data-mdb-ripple-color="dark">
+                        <input type="hidden" class="article-ids" th:id="${article.id}">
+                        <i th:id="'likedCount-article-' + ${article.id}" class="bi bi-hand-thumbs-up" th:text="${article.likes.size()}"></i>
+                        <input type="hidden" th:id="'ifLiked-article-' + ${article.id}" value="nonLiked">
+                    </p>
+                </th:block>
             </div>
         </div>
         <br>
@@ -39,6 +45,7 @@
 
     <th:block th:replace="~{fragments/footer :: pagination(url = '')}"/>
 </div>
+
 <!--  Include footer-->
 <th:block th:replace="~{fragments/footer :: footer}"/>
 </body>
