@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <!-- Include Header   -->
+    <th:block th:replace="~{fragments/header :: head}"/>
+    <title>Admin Panel</title>
+    <script defer type="text/javascript" th:src="@{/js/usersSearch.js}"></script>
+</head>
+<body>
+<!-- Include navbar -->
+<th:block th:replace="~{fragments/header :: navbar}"></th:block>
+
+
+<div class="container">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-12 col-lg-9 col-xl-7">
+            <div class="card" style="border-radius: 15px;">
+                <div class="card-body p-2 p-md-3">
+                    <div th:if="${message}" class="text-danger">
+                        <h4 class="mb-4 pb-2 pb-md-0 mb-md-5" th:text="${message}"></h4>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Admin Panel</h3>
+                    </div>
+
+                    <input type="text" id="usersSearch" class="form-control form-control-md mb-2"
+                           placeholder="Search user">
+                    <table class="table table-hover">
+                        <thead class="table-primary">
+                        <tr>
+                            <th>ID</th>
+                            <th>Email</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Role</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody id="usersTbody">
+
+                        <th:block th:each="usr : ${users}">
+                            <tr>
+                                <td th:text="${usr.id}"></td>
+                                <td th:text="${usr.email}"></td>
+                                <td th:text="${usr.firstName}"></td>
+                                <td th:text="${usr.lastName}"></td>
+                                <td th:text="${usr.role}"></td>
+                                <td>
+                                    <!--                                    <a th:if="${usr.role == 'USER'}" th:href="@{/adminPanel/user/{userId}/editRole(userId=usr.id, role='ADMIN')}">-->
+                                    <!--                                        <button class="btn btn-primary btn-sm">Make ADMIN-->
+                                    <!--                                        </button>-->
+                                    <!--                                    </a>-->
+                                    <form th:if="${usr.role.name() == 'USER'}"
+                                          th:action="@{/adminPanel/user/{userId}/editRole(userId=${usr.id})}"
+                                          method="post">
+                                        <input type="hidden" name="role" value="ADMIN">
+                                        <button type="submit" class="btn btn-primary btn-sm" style="font-size: 0.8rem;">
+                                            Make ADMIN
+                                        </button>
+                                    </form>
+
+                                    <form th:if="${usr.role.name() == 'ADMIN'}"
+                                          th:action="@{/adminPanel/user/{userId}/editRole(userId=${usr.id})}"
+                                          method="post">
+                                        <input type="hidden" name="role" value="USER">
+                                        <button type="submit" class="btn btn-primary btn-sm" style="font-size: 0.8rem;">
+                                            Make USER
+                                        </button>
+                                    </form>
+
+                                    <!--                                    <a th:if="${usr.role == 'ADMIN'}" th:href="@{/adminPanel/user/editRole(role='USER')}">-->
+                                    <!--                                        <button class="btn btn-primary btn-sm">Make USER-->
+                                    <!--                                        </button>-->
+                                    <!--                                    </a>-->
+                                </td>
+                                <td>
+                                    <form th:action="@{/adminPanel/user/{userId}/delete(userId=${usr.id})}"
+                                          method="post">
+                                        <button type="submit" class="btn btn-primary btn-sm">Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </th:block>
+
+                        </tbody>
+                    </table>
+
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="mt-4 pt-2">
+                                <a th:href="@{/profile}">
+                                    <button class="btn btn-primary btn-lg">Profile</button>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:replace="~{fragments/footer :: pagination(url = '/adminPanel')}"/>
+</div>
+
+
+<!--  Include footer-->
+<th:block th:replace="~{fragments/footer :: footer}"/>
+</body>
+</html>

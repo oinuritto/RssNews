@@ -7,6 +7,8 @@ import ru.itis.rssnews.dto.UsersPage;
 import ru.itis.rssnews.models.Role;
 import ru.itis.rssnews.models.User;
 
+import java.util.List;
+
 public interface UsersService {
     UpdateUserDto getUserForUpdateByEmail(String email);
 
@@ -24,4 +26,6 @@ public interface UsersService {
     User getCurrentUser();
 
     void updateUserRole(Long id, Role role);
+
+    List<UserDto> getUsersByFirstNameAndLastName(String firstName, String lastName);
 }

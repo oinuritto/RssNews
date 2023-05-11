@@ -25,6 +25,8 @@ import ru.itis.rssnews.repositories.UsersRepository;
 import ru.itis.rssnews.security.details.UserDetailsImpl;
 import ru.itis.rssnews.services.UsersService;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -132,6 +134,14 @@ public class UsersServiceImpl implements UsersService {
         User user = getUserOrElseThrow(id);
         user.setRole(role);
         usersRepository.save(user);
+    }
+
+    @Override
+    public List<UserDto> getUsersByFirstNameAndLastName(String firstName, String lastName) {
+//        return UserDto.from(usersRepository
+//                .findByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(firstName, lastName));
+        return UserDto.from(usersRepository
+                .findByFirstNameStartingWithIgnoreCaseAndLastNameStartingWithIgnoreCase(firstName, lastName));
     }
 
     private User getUserOrElseThrow(String email) {
