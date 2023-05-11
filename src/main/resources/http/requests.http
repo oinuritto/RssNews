@@ -1,5 +1,35 @@
-GET localhost/api/rss?page=1
+GET localhost/api/likes
 
 ###
 
+GET localhost/api/likes/user/3
 
+###
+
+GET localhost/api/likes/article/1
+
+###
+
+GET localhost/api/likes/user/3/count
+
+###
+
+GET localhost/api/likes/article/1/count
+
+###
+
+GET localhost/api/likes/article/1/user/3
+
+###
+
+DELETE localhost/api/likes/article/56
+Content-Type: application/json
+Cookie: lang=ru-RU; JSESSIONID=11A6386B6F842B7F84E2203FD7E020BB; XSRF-TOKEN=46eaea98-6197-4915-89b9-04c860b8fd73
+X-XSRF-TOKEN: ybqr40vvFlwhNZcx6WKq2AtO9IxJx9pKIGdeaIuq8UHaInyb_YzOgi6OL2QMA6YI3k-e4Tp72bRwpeNnEFM9UL2ak3m8Rkuo
+
+###
+
+POST localhost/api/likes/add/56
+Content-Type: application/json
+Cookie: lang=ru-RU; JSESSIONID=11A6386B6F842B7F84E2203FD7E020BB; XSRF-TOKEN=46eaea98-6197-4915-89b9-04c860b8fd73
+X-XSRF-TOKEN: ybqr40vvFlwhNZcx6WKq2AtO9IxJx9pKIGdeaIuq8UHaInyb_YzOgi6OL2QMA6YI3k-e4Tp72bRwpeNnEFM9UL2ak3m8Rkuo
