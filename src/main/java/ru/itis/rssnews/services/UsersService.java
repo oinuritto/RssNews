@@ -4,6 +4,8 @@ import ru.itis.rssnews.dto.SignUpDto;
 import ru.itis.rssnews.dto.UpdateUserDto;
 import ru.itis.rssnews.dto.UserDto;
 import ru.itis.rssnews.dto.UsersPage;
+import ru.itis.rssnews.models.Role;
+import ru.itis.rssnews.models.User;
 
 public interface UsersService {
     UpdateUserDto getUserForUpdateByEmail(String email);
@@ -16,4 +18,10 @@ public interface UsersService {
 
     UserDto updateUser(String email, UpdateUserDto userDto);
     void deleteUser(String email);
+
+    void deleteUser(Long id);
+
+    User getCurrentUser();
+
+    void updateUserRole(Long id, Role role);
 }

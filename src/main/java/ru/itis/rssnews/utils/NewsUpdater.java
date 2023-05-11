@@ -14,7 +14,6 @@ import ru.itis.rssnews.services.RssSourcesService;
 
 import javax.net.ssl.SSLHandshakeException;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -27,8 +26,8 @@ public class NewsUpdater {
     private static final Logger logger = LoggerFactory.getLogger(NewsUpdater.class);
 
     @Async
-//    @Scheduled(fixedRate = 2 * 60 * 60 * 1000) // Задача выполняется каждые 2 часа
-    @Scheduled(fixedRate = 2 * 60 * 1000) // Задача выполняется каждые 2 минуты
+    @Scheduled(fixedRate = 2 * 60 * 60 * 1000) // Задача выполняется каждые 2 часа
+//    @Scheduled(fixedRate = 2 * 60 * 1000) // Задача выполняется каждые 2 минуты
     public void updateNews() {
         logger.info("Started updating news.");
         RssSource lastSource = null;

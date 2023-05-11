@@ -7,6 +7,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.itis.rssnews.dto.RssSourcesPage;
+import ru.itis.rssnews.models.PageParam;
 import ru.itis.rssnews.models.RssSource;
 import ru.itis.rssnews.services.RssSourcesService;
 
@@ -17,15 +18,8 @@ public class RssSourceController {
     private final RssSourcesService rssSourcesService;
 
     @GetMapping
-    public String getSourcesPage(@RequestParam(value = "page", defaultValue = "1") String pageStr, ModelMap modelMap) {
-        int page;
-        try {
-            page = Integer.parseInt(pageStr);
-        } catch (NumberFormatException ex) {
-            page = 1;
-        }
-
-        RssSourcesPage sourcesPage = rssSourcesService.getAllSources(page);
+    public String getSourcesPage(@RequestParam(value = "page", defaultValue = "1") PageParam pageParam, ModelMap modelMap) {
+        RssSourcesPage sourcesPage = rssSourcesService.getAllSources(pageParam.getPage());
         modelMap.put("rssSources", sourcesPage.getRssSources());
         modelMap.put("pagesCount", sourcesPage.getTotalPagesCount());
         modelMap.put("page", sourcesPage.getPageNumber());

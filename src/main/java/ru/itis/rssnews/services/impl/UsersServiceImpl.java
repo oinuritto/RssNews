@@ -68,7 +68,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public UsersPage getAllUsers(int page) {
-        PageRequest pageRequest = PageRequest.of(page, defaultPageSize);
+        PageRequest pageRequest = PageRequest.of(page - 1, defaultPageSize);
         Page<User> usersPage = usersRepository.findAllByOrderByIdAsc(pageRequest);
 
         return UsersPage.builder()
@@ -113,14 +113,25 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public void deleteUser(String email) {
         User user = getUserOrElseThrow(email);
-        usersRepository.deleteById(user.getId());
-        // Получаем текущий контекст безопасности
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        // Если пользователь был аутентифицирован, то очищаем его данные аутентификации
-        if (auth != null) {
-            new SecurityContextLogoutHandler().logout(request, response, auth);
-        }
+        deleteUser(user);
+    }
 
+    @Override
+    public void deleteUser(Long id) {
+        User user = getUserOrElseThrow(id);
+        deleteUser(user);
+    }
+
+    @Override
+    public User getCurrentUser() {
+        return getUserOrElseThrow(SecurityContextHolder.getContext().getAuthentication().getName());
+    }
+
+    @Override
+    public void updateUserRole(Long id, Role role) {
+        User user = getUserOrElseThrow(id);
+        user.setRole(role);
+        usersRepository.save(user);
     }
 
     private User getUserOrElseThrow(String email) {
@@ -128,9 +139,29 @@ public class UsersServiceImpl implements UsersService {
                 .orElseThrow(() -> new NotFoundException("User with email = <" + email + "> is not found"));
     }
 
+    private User getUserOrElseThrow(Long id) {
+        return usersRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User with id = <" + id + "> is not found"));
+    }
+
     private void updateAuthenticationForUser(User user) {
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
         Authentication newAuthentication = new UsernamePasswordAuthenticationToken(userDetails, user.getPassword(), userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(newAuthentication);
+    }
+
+    private void deleteUser(User user) {
+        User currentUser = getCurrentUser();
+
+        usersRepository.deleteById(user.getId());
+
+        if (currentUser.equals(user)) {
+            // Получаем текущий контекст безопасности
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            // Если пользователь был аутентифицирован, то очищаем его данные аутентификации
+            if (auth != null) {
+                new SecurityContextLogoutHandler().logout(request, response, auth);
+            }
+        }
     }
 }
