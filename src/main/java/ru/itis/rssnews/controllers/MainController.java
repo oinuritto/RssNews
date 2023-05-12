@@ -1,5 +1,6 @@
 package ru.itis.rssnews.controllers;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,11 +17,23 @@ public class MainController {
     private final ArticlesService articlesService;
 
     @GetMapping("/")
-    public String getMainPage(@RequestParam(value = "page", defaultValue = "1") PageParam pageParam, ModelMap modelMap) {
-        ArticlesPage articlesPage = articlesService.getAll(pageParam.getPage());
+    public String getMainPage(@RequestParam(value = "page", defaultValue = "1") PageParam pageParam,
+                              @RequestParam(value = "isSorted", required = false) String sortParam,
+                              ModelMap modelMap,
+                              HttpSession session) {
+        if (sortParam != null) {
+            session.setAttribute("isSorted", Boolean.parseBoolean(sortParam));
+        } else if (session.getAttribute("isSorted") == null) {
+            session.setAttribute("isSorted", false);
+        }
+
+        boolean isSorted = Boolean.parseBoolean(String.valueOf(session.getAttribute("isSorted")));
+
+        ArticlesPage articlesPage = articlesService.getAll(pageParam.getPage(), isSorted);
         modelMap.put("articles", articlesPage.getArticles());
         modelMap.put("pagesCount", articlesPage.getTotalPagesCount());
         modelMap.put("page", pageParam.getPage());
+        modelMap.put("isSorted", isSorted);
         return "index";
     }
 

@@ -29,9 +29,11 @@ public class ArticlesServiceImpl implements ArticlesService {
 
 
     @Override
-    public ArticlesPage getAll(int page) {
+    public ArticlesPage getAll(int page, boolean isOrderedByLikes) {
         PageRequest pageRequest = PageRequest.of(page - 1, defaultPageSize);
-        Page<Article> articlesPage = articlesRepository.findAllByOrderByIdAsc(pageRequest);
+        Page<Article> articlesPage = isOrderedByLikes ?
+                articlesRepository.findAllOrderByLikesDesc(pageRequest) :
+                articlesRepository.findAllByOrderByIdDesc(pageRequest);
 
         return ArticlesPage.builder()
                 .articles(articlesPage.getContent())

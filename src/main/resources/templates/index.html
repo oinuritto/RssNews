@@ -15,6 +15,34 @@
 
 
 <div class="container">
+    <!-- Sorting -->
+    <div class="dropdown mb-2 d-flex justify-content-center">
+        <div class="btn-group">
+            <a th:href="@{/(isSorted=true)}" th:classappend="${isSorted} ? 'active' : ''" class="btn btn-secondary btn-sm">Sort by likes</a>
+            <a th:href="@{/(isSorted=false)}" th:classappend="${not isSorted} ? 'active' : ''" class="btn btn-secondary btn-sm">Sort by date</a>
+        </div>
+<!--        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1"-->
+<!--                data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--            Сортировка-->
+<!--        </button>-->
+<!--        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">-->
+<!--            <li>-->
+<!--                <form th:action="@{(page=1)}" method="post">-->
+<!--                <input type="hidden" name="isSorted" value="false"/>-->
+<!--                <input type="submit" class="dropdown-item" value="По умолчанию" th:disabled="${not isSorted}"/>-->
+<!--                </form>-->
+<!--            </li>-->
+<!--            <li>-->
+<!--                <form th:action="@{(page=1)}" method="post">-->
+<!--                <input type="hidden" name="isSorted" value="true"/>-->
+<!--                <input type="submit" class="dropdown-item" value="По популярности" th:disabled="${isSorted}"/>-->
+<!--                </form>-->
+<!--            </li>-->
+<!--        </ul>-->
+    </div>
+    <!-- Sorting -->
+
+
     <th:block sec:authorize="isAuthenticated()">
         <input type="hidden" class="userId" th:id="${currentUser.id}">
     </th:block>

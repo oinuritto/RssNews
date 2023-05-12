@@ -12,7 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Data
-@Entity(name = "articles")
+@Entity
+@Table(name = "articles")
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

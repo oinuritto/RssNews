@@ -9,7 +9,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Entity(name = "likes")
+@Entity
+@Table(name = "likes")
 public class Like {
 
     @EmbeddedId

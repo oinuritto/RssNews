@@ -11,7 +11,8 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Data
-@Entity(name = "sources")
+@Entity
+@Table(name = "sources")
 public class RssSource {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
