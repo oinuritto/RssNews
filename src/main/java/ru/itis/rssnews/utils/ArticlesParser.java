@@ -7,6 +7,7 @@ import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 import ru.itis.rssnews.models.Article;
+import ru.itis.rssnews.models.Category;
 import ru.itis.rssnews.models.RssSource;
 
 import java.io.IOException;
@@ -44,7 +45,9 @@ public class ArticlesParser {
                     .link(link)
                     .description(description)
                     .pubDate(pubDate)
-                    .category(category)
+                    .category(Category.builder()
+                            .name(category)
+                            .build())
                     .imageLink(!imageLink.equals("") ? imageLink : null)
                     .source(source)
                     .build();

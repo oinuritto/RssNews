@@ -8,13 +8,16 @@ import org.springframework.stereotype.Service;
 import ru.itis.rssnews.dto.ArticlesPage;
 import ru.itis.rssnews.exceptions.NotFoundException;
 import ru.itis.rssnews.models.Article;
+import ru.itis.rssnews.models.Category;
 import ru.itis.rssnews.repositories.ArticlesRepository;
+import ru.itis.rssnews.repositories.CategoriesRepository;
 import ru.itis.rssnews.services.ArticlesService;
 
 @Service
 @RequiredArgsConstructor
 public class ArticlesServiceImpl implements ArticlesService {
     private final ArticlesRepository articlesRepository;
+    private final CategoriesRepository categoriesRepository;
     @Value("${articles.default.page-size}")
     private int defaultPageSize;
 
@@ -38,6 +41,14 @@ public class ArticlesServiceImpl implements ArticlesService {
 
     @Override
     public void addArticle(Article article) {
+        Category category = article.getCategory();
+        if (!categoriesRepository.existsByName(category.getName())) {
+            categoriesRepository.save(category);
+        } else {
+            category = categoriesRepository.findByName(category.getName()).get();
+        }
+
+        article.setCategory(category);
         articlesRepository.save(article);
     }
 

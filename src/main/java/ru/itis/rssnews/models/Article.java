@@ -30,14 +30,18 @@ public class Article {
     @Column(nullable = false)
     private String pubDate;
 
-    @Column(nullable = false)
-    private String category;
+//    @Column(nullable = false)
+//    private String category;
 
     private String imageLink;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     @JoinColumn(name = "source_id")
     private RssSource source;
+
+    @ManyToOne()
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @OneToMany(mappedBy = "article")
     private List<Like> likes;
