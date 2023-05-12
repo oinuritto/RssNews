@@ -29,7 +29,15 @@ public class ArticlesParser {
             String description = item.select("description").first().text();
             String pubDate = item.select("pubDate").first().text();
             String category = item.select("category").first().text();
-            String imageLink = item.select("enclosure").attr("url");
+
+            Elements enclosureItems = item.select("enclosure");
+            String imageLink = "";
+            for (Element enclosureItem: enclosureItems) {
+                if (enclosureItem.attr("type").contains("image")) {
+                    imageLink = enclosureItem.attr("url");
+                    break;
+                }
+            }
 
             Article newsItem = Article.builder()
                     .title(title)

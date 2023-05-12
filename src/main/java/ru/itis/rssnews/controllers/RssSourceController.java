@@ -10,12 +10,14 @@ import ru.itis.rssnews.dto.RssSourcesPage;
 import ru.itis.rssnews.models.PageParam;
 import ru.itis.rssnews.models.RssSource;
 import ru.itis.rssnews.services.RssSourcesService;
+import ru.itis.rssnews.utils.NewsUpdater;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/rss")
 public class RssSourceController {
     private final RssSourcesService rssSourcesService;
+    private final NewsUpdater newsUpdater;
 
     @GetMapping
     public String getSourcesPage(@RequestParam(value = "page", defaultValue = "1") PageParam pageParam, ModelMap modelMap) {
@@ -35,8 +37,7 @@ public class RssSourceController {
     @PostMapping("/add")
     public String addRssSource(@RequestParam("url") String url, RedirectAttributes attributes) {
         boolean isValid = rssSourcesService.isValidRss(url);
-        System.out.println(url);
-        System.out.println(isValid);
+
         if (!isValid) {
             attributes.addFlashAttribute("message", "Not valid RSS");
             return "redirect:/rss";
@@ -47,6 +48,7 @@ public class RssSourceController {
         try {
             rssSourcesService.saveSource(rssSource);
             attributes.addFlashAttribute("message", "Successfully added");
+            newsUpdater.updateNews(rssSource);
         } catch (DataIntegrityViolationException ex) {
             attributes.addFlashAttribute("message", "Already saved");
         }

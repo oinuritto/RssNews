@@ -14,6 +14,7 @@ import ru.itis.rssnews.services.RssSourcesService;
 
 import javax.net.ssl.SSLHandshakeException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -27,24 +28,27 @@ public class NewsUpdater {
 
     @Async
     @Scheduled(fixedRate = 2 * 60 * 60 * 1000) // Задача выполняется каждые 2 часа
-//    @Scheduled(fixedRate = 2 * 60 * 1000) // Задача выполняется каждые 2 минуты
     public void updateNews() {
-        logger.info("Started updating news.");
-        RssSource lastSource = null;
-
-        // обновление новостей в БД
-        try {
             List<RssSource> sources = rssSourcesService.getAllSources();
 
             for (RssSource source: sources) {
-                lastSource = source; // for catch block of try-catch
-                List<Article> articles;
+                updateNews(source);
+            }
+
+    }
+
+    @Async
+    public void updateNews(RssSource source) {
+        logger.info("Started updating news for source: " + source.getSource());
+
+        // обновление новостей в БД
+        try {
+                List<Article> articles = new ArrayList<>();
 
                 try {
                     articles = articlesParser.parse(source); // Парсинг новостей из XML-документа
                 } catch (SSLHandshakeException ex) {
-                    logger.error("Cannot connect to: " + lastSource.getSource());
-                    continue;
+                    logger.error("Cannot connect to: " + source.getSource());
                 }
 
                 // Обновление новостей в БД
@@ -55,17 +59,16 @@ public class NewsUpdater {
                         articlesService.addArticle(article);
                     }
                 }
-            }
 
-            logger.info("Updating news end.");
+            logger.info("Updating news end for source: " + source.getSource());
 
         } catch (MalformedURLException ex) {
             logger.error("Not valid url in rss sources.");
-            logger.info("Deleting this source from db. Its rss url = " + lastSource.getSource());
-            rssSourcesService.deleteById(lastSource.getId());
+            logger.info("Deleting this source from db. Its rss url = " + source.getSource());
+            rssSourcesService.deleteById(source.getId());
             logger.info("Source deleted successfully.");
         } catch (Exception ex) {
-            logger.error("Error updating news.", ex);
+            logger.error("Error updating news for source: " + source.getSource(), ex);
         }
     }
 }
