@@ -21,19 +21,25 @@ public class ArticlesServiceImpl implements ArticlesService {
     @Value("${articles.default.page-size}")
     private int defaultPageSize;
 
-
     @Override
     public Article getByLink(String link) {
         return getArticleOrElseThrow(link);
     }
 
-
     @Override
-    public ArticlesPage getAll(int page, boolean isOrderedByLikes) {
+    public ArticlesPage getAll(int page, boolean isOrderedByLikes, Category category) {
         PageRequest pageRequest = PageRequest.of(page - 1, defaultPageSize);
-        Page<Article> articlesPage = isOrderedByLikes ?
-                articlesRepository.findAllOrderByLikesDesc(pageRequest) :
-                articlesRepository.findAllByOrderByIdDesc(pageRequest);
+
+        Page<Article> articlesPage;
+        if (isOrderedByLikes) {
+            articlesPage = category != null ?
+                    articlesRepository.findAllByCategoryNameOrderByLikesDesc(category.getName(), pageRequest) :
+                    articlesRepository.findAllOrderByLikesDesc(pageRequest);
+        } else {
+            articlesPage = category != null ?
+                    articlesRepository.findAllByCategoryNameOrderByIdDesc(category.getName(), pageRequest) :
+                    articlesRepository.findAllByOrderByIdDesc(pageRequest);
+        }
 
         return ArticlesPage.builder()
                 .articles(articlesPage.getContent())

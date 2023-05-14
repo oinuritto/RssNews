@@ -17,28 +17,32 @@
 <div class="container">
     <!-- Sorting -->
     <div class="dropdown mb-2 d-flex justify-content-center">
-        <div class="btn-group">
-            <a th:href="@{/(isSorted=true)}" th:classappend="${isSorted} ? 'active' : ''" class="btn btn-secondary btn-sm">Sort by likes</a>
-            <a th:href="@{/(isSorted=false)}" th:classappend="${not isSorted} ? 'active' : ''" class="btn btn-secondary btn-sm">Sort by date</a>
+        <div class="btn-group me-2">
+            <a th:href="@{/(isSorted=true)}" th:classappend="${isSorted} ? 'active' : ''"
+               class="btn btn-secondary btn-sm">Sort by likes</a>
+            <a th:href="@{/(isSorted=false)}" th:classappend="${not isSorted} ? 'active' : ''"
+               class="btn btn-secondary btn-sm">Sort by date</a>
         </div>
-<!--        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1"-->
-<!--                data-bs-toggle="dropdown" aria-expanded="false">-->
-<!--            Сортировка-->
-<!--        </button>-->
-<!--        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">-->
-<!--            <li>-->
-<!--                <form th:action="@{(page=1)}" method="post">-->
-<!--                <input type="hidden" name="isSorted" value="false"/>-->
-<!--                <input type="submit" class="dropdown-item" value="По умолчанию" th:disabled="${not isSorted}"/>-->
-<!--                </form>-->
-<!--            </li>-->
-<!--            <li>-->
-<!--                <form th:action="@{(page=1)}" method="post">-->
-<!--                <input type="hidden" name="isSorted" value="true"/>-->
-<!--                <input type="submit" class="dropdown-item" value="По популярности" th:disabled="${isSorted}"/>-->
-<!--                </form>-->
-<!--            </li>-->
-<!--        </ul>-->
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                Categories
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li>
+                    <a class="dropdown-item" th:href="@{/(category='all')}">
+                        All
+                    </a>
+                </li>
+                <th:block th:each="category : ${categories}">
+                    <li>
+                        <a class="dropdown-item" th:href="@{/(category=${category.name})}" th:text="${category.name}">
+                        </a>
+                    </li>
+                </th:block>
+            </ul>
+        </div>
     </div>
     <!-- Sorting -->
 
@@ -53,7 +57,8 @@
             </div>
             <div class="card-body">
                 <h4 class="card-title" th:text="${article.title}"></h4>
-                <h6 class="card-subtitle mb-2 text-muted text-sm-end" th:text="'Category: ' + ${article.category.name}"></h6>
+                <h6 class="card-subtitle mb-2 text-muted text-sm-end"
+                    th:text="'Category: ' + ${article.category.name}"></h6>
                 <h5 class="card-text" th:text="${article.description}"></h5>
                 <h6 class="card-subtitle mb-2 text-muted text-sm-end" th:text="${article.pubDate}"></h6>
                 <a th:href="${article.link}" class="btn btn-primary btn-sm">Go to the news</a>
@@ -62,7 +67,8 @@
                     <p th:id="'liked-article-' + ${article.id}" class="btn btn-link btn-floating btn-lg like-button"
                        role="button" data-mdb-ripple-color="dark">
                         <input type="hidden" class="article-ids" th:id="${article.id}">
-                        <i th:id="'likedCount-article-' + ${article.id}" class="bi bi-hand-thumbs-up" th:text="${article.likes.size()}"></i>
+                        <i th:id="'likedCount-article-' + ${article.id}" class="bi bi-hand-thumbs-up"
+                           th:text="${article.likes.size()}"></i>
                         <input type="hidden" th:id="'ifLiked-article-' + ${article.id}" value="nonLiked">
                     </p>
                 </th:block>
