@@ -60,6 +60,11 @@ public class ArticlesServiceImpl implements ArticlesService {
         articlesRepository.save(article);
     }
 
+    @Override
+    public boolean existsByLink(String link) {
+        return articlesRepository.existsByLink(link);
+    }
+
     private Article getArticleOrElseThrow(String link) {
         return articlesRepository.findByLink(link)
                 .orElseThrow(() -> new NotFoundException("Article with link = <" + link + "> is not found"));

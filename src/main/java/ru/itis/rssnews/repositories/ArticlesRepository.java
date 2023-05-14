@@ -24,4 +24,5 @@ public interface ArticlesRepository extends JpaRepository<Article, Long> {
     @Query("SELECT a FROM Article a LEFT JOIN a.likes l WHERE a.category IN " +
             "(SELECT c FROM Category c WHERE c.name = :categoryName) GROUP BY a.id ORDER BY SIZE(l) DESC")
     Page<Article> findAllByCategoryNameOrderByLikesDesc(String categoryName, Pageable pageable);
+    boolean existsByLink(String link);
 }

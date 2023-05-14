@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import ru.itis.rssnews.exceptions.NotFoundException;
 import ru.itis.rssnews.models.Article;
 import ru.itis.rssnews.models.RssSource;
 import ru.itis.rssnews.services.ArticlesService;
@@ -34,7 +33,6 @@ public class NewsUpdater {
             for (RssSource source: sources) {
                 updateNews(source);
             }
-
     }
 
     @Async
@@ -53,9 +51,7 @@ public class NewsUpdater {
 
                 // Обновление новостей в БД
                 for (Article article : articles) {
-                    try {
-                        articlesService.getByLink(article.getLink());
-                    } catch (NotFoundException ex) {
+                    if (!articlesService.existsByLink(article.getLink())) {
                         articlesService.addArticle(article);
                     }
                 }

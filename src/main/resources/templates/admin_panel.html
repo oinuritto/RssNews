@@ -48,10 +48,6 @@
                                 <td th:text="${usr.lastName}"></td>
                                 <td th:text="${usr.role}"></td>
                                 <td>
-                                    <!--                                    <a th:if="${usr.role == 'USER'}" th:href="@{/adminPanel/user/{userId}/editRole(userId=usr.id, role='ADMIN')}">-->
-                                    <!--                                        <button class="btn btn-primary btn-sm">Make ADMIN-->
-                                    <!--                                        </button>-->
-                                    <!--                                    </a>-->
                                     <form th:if="${usr.role.name() == 'USER'}"
                                           th:action="@{/adminPanel/user/{userId}/editRole(userId=${usr.id})}"
                                           method="post">
@@ -69,11 +65,6 @@
                                             Make USER
                                         </button>
                                     </form>
-
-                                    <!--                                    <a th:if="${usr.role == 'ADMIN'}" th:href="@{/adminPanel/user/editRole(role='USER')}">-->
-                                    <!--                                        <button class="btn btn-primary btn-sm">Make USER-->
-                                    <!--                                        </button>-->
-                                    <!--                                    </a>-->
                                 </td>
                                 <td>
                                     <form th:action="@{/adminPanel/user/{userId}/delete(userId=${usr.id})}"

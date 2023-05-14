@@ -31,7 +31,6 @@ public class MainController {
         setIsSortedToSession(sortParam, session);
         setSelectedCategoryToSession(categoryName, session);
 
-
         boolean isSorted = Boolean.parseBoolean(String.valueOf(session.getAttribute("isSorted")));
         Category category = (Category) session.getAttribute("selectedCategory");
         System.out.println(category + "   " + isSorted);
