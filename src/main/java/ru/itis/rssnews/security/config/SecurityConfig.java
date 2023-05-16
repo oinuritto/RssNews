@@ -22,8 +22,11 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
-
     private final UserDetailsService userDetailsServiceImpl;
+    public static final String[] OPEN_API_PATHS = {"/v3/api-docs.yaml",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html"};
 
 
     @Bean
@@ -38,10 +41,11 @@ public class SecurityConfig {
         return
                 http
                         .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .ignoringRequestMatchers("/error")
+                        .ignoringRequestMatchers("/error", "/api/**")
                         .and()
                         .authorizeHttpRequests()
                         .requestMatchers("/", "/error", "/rss", "/api/likes/**").permitAll()
+                        .requestMatchers(OPEN_API_PATHS).permitAll()
                         .requestMatchers("/login", "/register").anonymous()
                         .requestMatchers(HttpMethod.DELETE, "/api/likes/**").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/likes/add/**").authenticated()

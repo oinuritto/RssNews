@@ -1,13 +1,9 @@
-const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
 function setLike(articleId) {
     fetch('/api/likes/add/' + articleId, {
         method: "POST",
         credentials: "include",
         headers: {
-            "Content-Type": "application/json",
-            [csrfHeader]: csrfToken
+            "Content-Type": "application/json"
         }
     })
         .then((response) => {
@@ -26,8 +22,7 @@ function dislike(articleId) {
         credentials: "include",
         method: "DELETE",
         headers: {
-            "Content-Type": "application/json",
-            [csrfHeader]: csrfToken
+            "Content-Type": "application/json"
         }
     })
         .then((response) => {

@@ -1,6 +1,7 @@
 package ru.itis.rssnews.controllers;
 
 
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -34,6 +35,7 @@ public class AdminPanelController {
         return "admin_panel";
     }
 
+    @Hidden
     @GetMapping("/users")
     @ResponseBody
     public List<UserDto> getUsers(@RequestParam(value = "query", required = false) String query) {
