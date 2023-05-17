@@ -1,6 +1,7 @@
 package ru.itis.rssnews.controllers.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -35,10 +36,10 @@ public class LikesController {
             @ApiResponse(responseCode = "401", description = "Request from unauthorized user"),
     })
     @PostMapping("/add/{articleId}")
-    public ResponseEntity<?> createLike(Authentication authentication, @PathVariable Long articleId) {
+    public ResponseEntity<?> createLike(Authentication authentication,
+                                        @Parameter(description = "Article's id") @PathVariable Long articleId) {
         // проверяем, что пользователь авторизован
         if (authentication != null && authentication.isAuthenticated()) {
-            System.out.println(authentication.getName());
             // добавляем лайк и возвращаем успешный ответ
             likesService.addLike(articleId, usersService.getCurrentUser().getId());
             return ResponseEntity.accepted().build();
@@ -71,7 +72,7 @@ public class LikesController {
             )
     })
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<LikeDto>> getLikesByUserId(@PathVariable Long userId) {
+    public ResponseEntity<List<LikeDto>> getLikesByUserId(@Parameter(description = "User's id") @PathVariable Long userId) {
         List<LikeDto> likes = likesService.getLikesByUserId(userId);
         return new ResponseEntity<>(likes, HttpStatus.OK);
     }
@@ -85,7 +86,7 @@ public class LikesController {
             )
     })
     @GetMapping("/article/{articleId}")
-    public ResponseEntity<List<LikeDto>> getLikesByArticleId(@PathVariable Long articleId) {
+    public ResponseEntity<List<LikeDto>> getLikesByArticleId(@Parameter(description = "Article's id") @PathVariable Long articleId) {
         List<LikeDto> likes = likesService.getLikesByArticleId(articleId);
         return new ResponseEntity<>(likes, HttpStatus.OK);
     }
@@ -99,7 +100,7 @@ public class LikesController {
             )
     })
     @GetMapping("/user/{userId}/count")
-    public ResponseEntity<Integer> getLikesCountByUserId(@PathVariable Long userId) {
+    public ResponseEntity<Integer> getLikesCountByUserId(@Parameter(description = "User's id") @PathVariable Long userId) {
         int count = likesService.getLikesCountByUserId(userId);
         return new ResponseEntity<>(count, HttpStatus.OK);
     }
@@ -113,7 +114,7 @@ public class LikesController {
             )
     })
     @GetMapping("/article/{articleId}/count")
-    public ResponseEntity<Integer> getLikesCountByArticleId(@PathVariable Long articleId) {
+    public ResponseEntity<Integer> getLikesCountByArticleId(@Parameter(description = "Article's id") @PathVariable Long articleId) {
         int count = likesService.getLikesCountByArticleId(articleId);
         return new ResponseEntity<>(count, HttpStatus.OK);
     }
@@ -124,10 +125,12 @@ public class LikesController {
                     content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = LikeDto.class))
                     }
-            )
+            ),
+            @ApiResponse(responseCode = "404", description = "Like not found")
     })
     @GetMapping("/article/{articleId}/user/{userId}")
-    public ResponseEntity<LikeDto> getLikeByArticleIdAndUserId(@PathVariable Long articleId, @PathVariable Long userId) {
+    public ResponseEntity<LikeDto> getLikeByArticleIdAndUserId(@Parameter(description = "Article's id") @PathVariable Long articleId,
+                                                               @Parameter(description = "User's id") @PathVariable Long userId) {
         LikeDto like = likesService.getLikeByArticleIdAndUserId(articleId, userId);
         return new ResponseEntity<>(like, HttpStatus.OK);
     }
@@ -135,10 +138,12 @@ public class LikesController {
     @Operation(summary = "Delete like")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "202", description = "Like deleted"),
-            @ApiResponse(responseCode = "401", description = "Request from unauthorized user")
+            @ApiResponse(responseCode = "401", description = "Request from unauthorized user"),
+            @ApiResponse(responseCode = "404", description = "Like for delete not found")
     })
     @DeleteMapping("/article/{articleId}")
-    public ResponseEntity<?> deleteLikeByArticleId(@PathVariable Long articleId, Authentication authentication) {
+    public ResponseEntity<?> deleteLikeByArticleId(@Parameter(description = "Article's id") @PathVariable Long articleId,
+                                                   Authentication authentication) {
         // проверяем, что пользователь авторизован
         if (authentication != null && authentication.isAuthenticated()) {
             // удаляем лайк и возвращаем успешный ответ

@@ -33,7 +33,6 @@ public class MainController {
 
         boolean isSorted = Boolean.parseBoolean(String.valueOf(session.getAttribute("isSorted")));
         Category category = (Category) session.getAttribute("selectedCategory");
-        System.out.println(category + "   " + isSorted);
 
         ArticlesPage articlesPage = articlesService.getAll(pageParam.getPage(), isSorted, category);
         modelMap.put("articles", articlesPage.getArticles());
@@ -46,8 +45,6 @@ public class MainController {
     }
 
     private void setSelectedCategoryToSession(String categoryName, HttpSession session) {
-        System.out.println(categoryName);
-        System.out.println("IF: " + (categoryName != null) + " " + categoriesService.exists(categoryName));
         if (categoryName != null && categoriesService.exists(categoryName)) {
             session.setAttribute("selectedCategory", categoriesService.getByName(categoryName));
         } else if (session.getAttribute("selectedCategory") == null || Objects.equals(categoryName, "all")){

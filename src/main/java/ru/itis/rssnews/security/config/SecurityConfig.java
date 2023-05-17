@@ -14,7 +14,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import ru.itis.rssnews.security.handlers.CustomAccessDeniedHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -44,13 +46,14 @@ public class SecurityConfig {
                         .ignoringRequestMatchers("/error", "/api/**")
                         .and()
                         .authorizeHttpRequests()
-                        .requestMatchers("/", "/error", "/rss", "/api/likes/**").permitAll()
-                        .requestMatchers(OPEN_API_PATHS).permitAll()
+//                        .requestMatchers("/", "/error", "/rss", "/api/likes/**", "/403").permitAll()
+//                        .requestMatchers(OPEN_API_PATHS).permitAll()
                         .requestMatchers("/login", "/register").anonymous()
                         .requestMatchers(HttpMethod.DELETE, "/api/likes/**").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/likes/add/**").authenticated()
                         .requestMatchers("/profile/**", "/logout", "/rss/add").authenticated()
                         .requestMatchers( "/adminPanel/**", "/rss/delete/**").hasAuthority("ADMIN")
+                        .anyRequest().permitAll()
                         .and()
                         .formLogin()
                         .loginPage("/login")
@@ -60,12 +63,19 @@ public class SecurityConfig {
                         .and()
                         .logout().logoutUrl("/logout").logoutSuccessUrl("/")
                         .and()
+                        .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
+                        .and()
                         .build();
     }
 
     @Autowired
     public void bindUserDetailsServiceAndPasswordEncoder(AuthenticationManagerBuilder builder) throws Exception {
         builder.userDetailsService(userDetailsServiceImpl).passwordEncoder(passwordEncoder);
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler(){
+        return new CustomAccessDeniedHandler();
     }
 }
 

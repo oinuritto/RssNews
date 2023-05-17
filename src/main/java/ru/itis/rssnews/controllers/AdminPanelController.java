@@ -27,8 +27,6 @@ public class AdminPanelController {
     public String getAdminPage(@RequestParam(value = "page", defaultValue = "1") PageParam pageParam, ModelMap modelMap) {
         UsersPage usersPage = usersService.getAllUsers(pageParam.getPage());
 
-        System.out.println(usersPage);
-
         modelMap.put("users", usersPage.getUsers());
         modelMap.put("pagesCount", usersPage.getTotalPagesCount());
         modelMap.put("page", pageParam.getPage());
