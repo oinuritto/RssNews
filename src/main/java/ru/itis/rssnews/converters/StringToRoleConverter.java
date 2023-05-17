@@ -3,7 +3,7 @@ package ru.itis.rssnews.converters;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import ru.itis.rssnews.exceptions.UpdateEntityException;
-import ru.itis.rssnews.models.Role;
+import ru.itis.rssnews.models.helpers.Role;
 
 @Component
 public class StringToRoleConverter implements Converter<String, Role> {

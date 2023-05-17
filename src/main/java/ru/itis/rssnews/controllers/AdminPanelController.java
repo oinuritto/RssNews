@@ -8,11 +8,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.itis.rssnews.dto.UserDto;
-import ru.itis.rssnews.dto.UsersPage;
+import ru.itis.rssnews.dto.page.UsersPage;
 import ru.itis.rssnews.exceptions.NotFoundException;
 import ru.itis.rssnews.exceptions.UpdateEntityException;
-import ru.itis.rssnews.models.PageParam;
-import ru.itis.rssnews.models.Role;
+import ru.itis.rssnews.models.helpers.PageParam;
+import ru.itis.rssnews.models.helpers.Role;
 import ru.itis.rssnews.services.UsersService;
 
 import java.util.List;

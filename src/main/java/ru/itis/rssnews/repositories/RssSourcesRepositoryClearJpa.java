@@ -10,7 +10,7 @@ import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.itis.rssnews.dto.RssSourcesPage;
+import ru.itis.rssnews.dto.page.RssSourcesPage;
 import ru.itis.rssnews.models.RssSource;
 
 import java.util.List;

@@ -2,7 +2,7 @@ package ru.itis.rssnews.converters;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
-import ru.itis.rssnews.models.PageParam;
+import ru.itis.rssnews.models.helpers.PageParam;
 
 @Component
 public class StringToPageParam implements Converter<String, PageParam> {

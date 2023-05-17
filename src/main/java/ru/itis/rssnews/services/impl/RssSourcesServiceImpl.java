@@ -5,7 +5,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.itis.rssnews.dto.RssSourcesPage;
+import ru.itis.rssnews.dto.page.RssSourcesPage;
 import ru.itis.rssnews.models.RssSource;
 import ru.itis.rssnews.repositories.ArticlesRepository;
 import ru.itis.rssnews.repositories.RssSourcesRepositoryClearJpa;

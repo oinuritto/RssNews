@@ -1,4 +1,4 @@
-package ru.itis.rssnews.dto;
+package ru.itis.rssnews.dto.page;
 
 
 import lombok.AllArgsConstructor;

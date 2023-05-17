@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.itis.rssnews.models.Role;
+import ru.itis.rssnews.models.helpers.Role;
 import ru.itis.rssnews.models.User;
 
 import java.util.List;

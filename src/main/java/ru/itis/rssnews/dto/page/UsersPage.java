@@ -1,10 +1,10 @@
-package ru.itis.rssnews.dto;
+package ru.itis.rssnews.dto.page;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.itis.rssnews.models.RssSource;
+import ru.itis.rssnews.dto.UserDto;
 
 import java.util.List;
 
@@ -12,8 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RssSourcesPage {
-    private List<RssSource> rssSources;
-    private Integer pageNumber;
+public class UsersPage {
+    private List<UserDto> users;
     private Integer totalPagesCount;
 }

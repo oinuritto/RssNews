@@ -3,8 +3,8 @@ package ru.itis.rssnews.services;
 import ru.itis.rssnews.dto.SignUpDto;
 import ru.itis.rssnews.dto.UpdateUserDto;
 import ru.itis.rssnews.dto.UserDto;
-import ru.itis.rssnews.dto.UsersPage;
-import ru.itis.rssnews.models.Role;
+import ru.itis.rssnews.dto.page.UsersPage;
+import ru.itis.rssnews.models.helpers.Role;
 import ru.itis.rssnews.models.User;
 
 import java.util.List;

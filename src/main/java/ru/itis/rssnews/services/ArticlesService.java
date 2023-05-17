@@ -1,6 +1,6 @@
 package ru.itis.rssnews.services;
 
-import ru.itis.rssnews.dto.ArticlesPage;
+import ru.itis.rssnews.dto.page.ArticlesPage;
 import ru.itis.rssnews.models.Article;
 import ru.itis.rssnews.models.Category;
 

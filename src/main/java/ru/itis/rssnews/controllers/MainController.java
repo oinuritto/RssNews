@@ -3,18 +3,18 @@ package ru.itis.rssnews.controllers;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.itis.rssnews.dto.ArticlesPage;
+import ru.itis.rssnews.dto.page.ArticlesPage;
 import ru.itis.rssnews.models.Category;
-import ru.itis.rssnews.models.PageParam;
+import ru.itis.rssnews.models.helpers.PageParam;
 import ru.itis.rssnews.services.ArticlesService;
 import ru.itis.rssnews.services.CategoriesService;
 
 import java.util.Objects;
 
+// TODO: сделать поиск по title
 @Controller
 @RequiredArgsConstructor
 public class MainController {
@@ -58,18 +58,5 @@ public class MainController {
         } else if (session.getAttribute("isSorted") == null) {
             session.setAttribute("isSorted", false);
         }
-    }
-
-    @GetMapping("/login")
-    public String login(@RequestParam(required = false) String error, Model model) {
-        if (error != null) {
-            model.addAttribute("errMsg", "Wrong password or username");
-        }
-        return "login";
-    }
-
-    @GetMapping("/logout")
-    public String logout() {
-        return "logout";
     }
 }

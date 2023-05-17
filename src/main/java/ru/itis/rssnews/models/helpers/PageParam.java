@@ -1,4 +1,4 @@
-package ru.itis.rssnews.models;
+package ru.itis.rssnews.models.helpers;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

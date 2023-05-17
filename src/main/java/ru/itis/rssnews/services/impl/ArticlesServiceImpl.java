@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.itis.rssnews.dto.ArticlesPage;
+import ru.itis.rssnews.dto.page.ArticlesPage;
 import ru.itis.rssnews.exceptions.NotFoundException;
 import ru.itis.rssnews.models.Article;
 import ru.itis.rssnews.models.Category;

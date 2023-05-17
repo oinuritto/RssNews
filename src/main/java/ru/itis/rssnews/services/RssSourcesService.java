@@ -1,6 +1,6 @@
 package ru.itis.rssnews.services;
 
-import ru.itis.rssnews.dto.RssSourcesPage;
+import ru.itis.rssnews.dto.page.RssSourcesPage;
 import ru.itis.rssnews.models.RssSource;
 
 import java.util.List;

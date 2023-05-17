@@ -1,4 +1,4 @@
-package ru.itis.rssnews.models;
+package ru.itis.rssnews.models.helpers;
 
 public enum Role {
     USER,
