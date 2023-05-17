@@ -31,9 +31,6 @@ public class Article {
     @Column(nullable = false)
     private String pubDate;
 
-//    @Column(nullable = false)
-//    private String category;
-
     private String imageLink;
 
     @ManyToOne()

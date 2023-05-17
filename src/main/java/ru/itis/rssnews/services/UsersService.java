@@ -8,6 +8,7 @@ import ru.itis.rssnews.models.Role;
 import ru.itis.rssnews.models.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UsersService {
     UpdateUserDto getUserForUpdateByEmail(String email);
@@ -28,4 +29,14 @@ public interface UsersService {
     void updateUserRole(Long id, Role role);
 
     List<UserDto> getUsersByFirstNameAndLastName(String firstName, String lastName);
+
+    void createPasswordResetToken(String email, String token);
+
+    boolean existsUserByEmail(String email);
+
+    Optional<User> getUserByPasswordResetToken(String token);
+
+    void updateUserPassword(String email, String password, String token);
+
+    String validatePasswordResetToken(String token);
 }
