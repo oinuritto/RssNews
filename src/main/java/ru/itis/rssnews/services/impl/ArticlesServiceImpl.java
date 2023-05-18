@@ -68,7 +68,7 @@ public class ArticlesServiceImpl implements ArticlesService {
     @Override
     public ArticlesPage getAllByTitle(int page, String title) {
         PageRequest pageRequest = PageRequest.of(page - 1, defaultPageSize);
-        Page<Article> articlesPage = articlesRepository.findAllByTitleStartingWithIgnoreCase(title, pageRequest);
+        Page<Article> articlesPage = articlesRepository.findAllByTitleContainingIgnoreCase(title, pageRequest);
 
         return ArticlesPage.builder()
                 .articles(articlesPage.getContent())

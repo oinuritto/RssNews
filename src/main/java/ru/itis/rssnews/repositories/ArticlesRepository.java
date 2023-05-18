@@ -25,5 +25,5 @@ public interface ArticlesRepository extends JpaRepository<Article, Long> {
             "(SELECT c FROM Category c WHERE c.name = :categoryName) GROUP BY a.id ORDER BY SIZE(l) DESC")
     Page<Article> findAllByCategoryNameOrderByLikesDesc(String categoryName, Pageable pageable);
     boolean existsByLink(String link);
-    Page<Article> findAllByTitleStartingWithIgnoreCase(String title, Pageable pageable);
+    Page<Article> findAllByTitleContainingIgnoreCase(String title, Pageable pageable);
 }
