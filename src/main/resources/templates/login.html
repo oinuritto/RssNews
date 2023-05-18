@@ -17,6 +17,7 @@
             <div class="card mx-auto">
                 <div class="card-header">
                     <h3 class="card-title">Login</h3>
+                    <h6 class="card-subtitle"><a class="text-decoration-none" th:href="@{/password/forgot}">Forgot password?</a></h6>
                     <div th:if="${errMsg}" class="text-danger">
                         <span th:text="${errMsg}"></span>
                     </div>
@@ -33,7 +34,7 @@
                         </div>
                         <div class="form-group">
                             <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
-                            <button type="submit" class="btn btn-primary">Login</button>
+                            <button type="submit" class="btn btn-primary mt-2">Login</button>
                         </div>
                     </form>
                 </div>

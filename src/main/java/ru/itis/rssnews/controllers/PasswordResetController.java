@@ -7,6 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.thymeleaf.context.Context;
 import ru.itis.rssnews.dto.PasswordDto;
 import ru.itis.rssnews.models.User;
 import ru.itis.rssnews.services.UsersService;
@@ -38,7 +40,8 @@ public class PasswordResetController {
 
         String token = UUID.randomUUID().toString();
         usersService.createPasswordResetToken(email, token);
-        emailUtil.sendMail(emailUtil.constructResetTokenEmail(token, email));
+
+        sendResetPasswordMail(email, token);
 
         attributes.addFlashAttribute("message", "The link sent to your email.");
         return "redirect:/password/forgot";
@@ -85,5 +88,13 @@ public class PasswordResetController {
             attributes.addFlashAttribute("message", "User not found...");
             return "redirect:/password/forgot";
         }
+    }
+
+    private void sendResetPasswordMail(String email, String token) {
+        Context context = new Context();
+        String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+        context.setVariable("baseUrl", baseUrl);
+        context.setVariable("token", token);
+        emailUtil.sendEmailWithTemplate(email, "Password Reset", "password_reset_mail", context);
     }
 }
