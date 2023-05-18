@@ -58,7 +58,7 @@
                 <h6 class="card-subtitle mb-2 text-muted text-sm-end"
                     th:text="'Category: ' + ${article.category.name}"></h6>
                 <h5 class="card-text" th:text="${article.description}"></h5>
-                <h6 class="card-subtitle mb-2 text-muted text-sm-end" th:text="${article.pubDate}"></h6>
+                <h6 class="card-subtitle mb-2 text-muted text-sm-end" th:text="${#dates.format(article.pubDate, 'yyyy-MM-dd HH:mm:ss')}"></h6>
                 <a th:href="${article.link}" class="btn btn-primary btn-sm">See more</a>
                 <a th:href="${article.getSource().getSource()}" class="btn btn-primary btn-sm">Go to RSS source</a>
                 <th:block>

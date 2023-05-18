@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 @Builder
@@ -29,7 +30,7 @@ public class Article {
     private String description;
 
     @Column(nullable = false)
-    private String pubDate;
+    private Date pubDate;
 
     private String imageLink;
 

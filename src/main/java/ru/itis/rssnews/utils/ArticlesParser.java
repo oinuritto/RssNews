@@ -1,5 +1,6 @@
 package ru.itis.rssnews.utils;
 
+import lombok.extern.log4j.Log4j2;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -12,11 +13,18 @@ import ru.itis.rssnews.models.RssSource;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+@Log4j2
 @Component
 public class ArticlesParser {
+    private static final String DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
+
     public List<Article> parse(RssSource source) throws IOException {
         List<Article> newsItems = new ArrayList<>();
         Document doc = Jsoup.parse(new URL(source.getSource()).openStream(), "UTF-8", "",
@@ -28,8 +36,17 @@ public class ArticlesParser {
             String title = item.select("title").first().text();
             String link = item.select("link").first().text();
             String description = item.select("description").first().text();
-            String pubDate = item.select("pubDate").first().text();
             String category = item.select("category").first().text();
+            String pubDateStr = item.select("pubDate").first().text();
+            Date pubDate;
+
+            try {
+                pubDate = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH).parse(pubDateStr);
+            } catch (ParseException e) {
+                log.warn(String.format("Cannot parse pubDate for element with link %s in rss source %s",
+                        link, source.getSource()), e);
+                continue;
+            }
 
             Elements enclosureItems = item.select("enclosure");
             String imageLink = "";

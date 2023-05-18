@@ -37,8 +37,8 @@ public class ArticlesServiceImpl implements ArticlesService {
                     articlesRepository.findAllOrderByLikesDesc(pageRequest);
         } else {
             articlesPage = category != null ?
-                    articlesRepository.findAllByCategoryNameOrderByIdDesc(category.getName(), pageRequest) :
-                    articlesRepository.findAllByOrderByIdDesc(pageRequest);
+                    articlesRepository.findAllByCategoryNameOrderByPubDateDesc(category.getName(), pageRequest) :
+                    articlesRepository.findAllByOrderByPubDateDesc(pageRequest);
         }
 
         return ArticlesPage.builder()
