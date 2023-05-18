@@ -48,11 +48,11 @@ public class PasswordResetController {
     }
 
     @GetMapping("/reset")
-    public String showChangePasswordPage(Model model,
+    public String resetPasswordPage(Model model,
                                          @RequestParam("token") String token,
                                          RedirectAttributes attributes) {
         String result = usersService.validatePasswordResetToken(token);
-        if(result != null) {
+        if (result != null) {
             attributes.addFlashAttribute("message", "Link expired or invalid.");
             return "redirect:/password/forgot";
         } else {
@@ -64,7 +64,7 @@ public class PasswordResetController {
     }
 
     @PostMapping("/reset")
-    public String savePassword(@Valid @ModelAttribute("passwordDto") PasswordDto passwordDto,
+    public String processResetPassword(@Valid @ModelAttribute("passwordDto") PasswordDto passwordDto,
                                @RequestParam("token") String token,
                                BindingResult bindingResult,
                                RedirectAttributes attributes) {
@@ -74,20 +74,19 @@ public class PasswordResetController {
         }
         String result = usersService.validatePasswordResetToken(token);
 
-        if(result != null) {
+        if (result != null) {
             attributes.addFlashAttribute("message", "Link expired or invalid.");
             return "redirect:/password/forgot";
         }
 
         Optional<User> user = usersService.getUserByPasswordResetToken(token);
-        if(user.isPresent()) {
+        if (user.isPresent()) {
             usersService.updateUserPassword(user.get().getEmail(), passwordDto.getNewPassword(), token);
             attributes.addFlashAttribute("message", "Password changed successful");
-            return "redirect:/password/forgot";
         } else {
             attributes.addFlashAttribute("message", "User not found...");
-            return "redirect:/password/forgot";
         }
+        return "redirect:/password/forgot";
     }
 
     private void sendResetPasswordMail(String email, String token) {

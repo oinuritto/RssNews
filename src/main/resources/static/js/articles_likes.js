@@ -7,7 +7,7 @@ function setLike(articleId) {
         }
     })
         .then((response) => {
-            if (response.ok) {
+            if (response.status === 202) {
                 document.getElementById("ifLiked-article-" + articleId).setAttribute("value", "liked");
                 document.getElementById("likedCount-article-" + articleId).className = "bi bi-hand-thumbs-up-fill";
                 return update(articleId);
@@ -26,7 +26,7 @@ function dislike(articleId) {
         }
     })
         .then((response) => {
-            if (response.ok) {
+            if (response.status === 202) {
                 document.getElementById("ifLiked-article-" + articleId).setAttribute("value", "nonLiked");
                 document.getElementById("likedCount-article-" + articleId).className = "bi bi-hand-thumbs-up";
                 return update(articleId);

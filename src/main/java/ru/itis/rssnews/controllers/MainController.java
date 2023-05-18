@@ -44,6 +44,19 @@ public class MainController {
         return "index";
     }
 
+    @GetMapping("/search")
+    public String getMainPage(@RequestParam(value = "page", defaultValue = "1") PageParam pageParam,
+                              @RequestParam(value = "title", required = false) String title,
+                              ModelMap modelMap) {
+
+        ArticlesPage articlesPage = articlesService.getAllByTitle(pageParam.getPage(), title);
+        modelMap.put("articles", articlesPage.getArticles());
+        modelMap.put("pagesCount", articlesPage.getTotalPagesCount());
+        modelMap.put("page", pageParam.getPage());
+        modelMap.put("searchTitle", title);
+        return "found_articles";
+    }
+
     private void setSelectedCategoryToSession(String categoryName, HttpSession session) {
         if (categoryName != null && categoriesService.exists(categoryName)) {
             session.setAttribute("selectedCategory", categoriesService.getByName(categoryName));

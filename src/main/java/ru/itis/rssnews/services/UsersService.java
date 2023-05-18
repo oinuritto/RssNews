@@ -20,6 +20,7 @@ public interface UsersService {
     UsersPage getAllUsers(int page);
 
     UserDto updateUser(String email, UpdateUserDto userDto);
+
     void deleteUser(String email);
 
     void deleteUser(Long id);

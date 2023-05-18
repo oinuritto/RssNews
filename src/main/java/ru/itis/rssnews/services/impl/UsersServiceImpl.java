@@ -144,7 +144,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public List<UserDto> getUsersByFirstNameAndLastName(String firstName, String lastName) {
         return UserDto.from(usersRepository
-                .findByFirstNameStartingWithIgnoreCaseAndLastNameStartingWithIgnoreCase(firstName, lastName));
+                .findAllByFirstNameStartingWithIgnoreCaseAndLastNameStartingWithIgnoreCase(firstName, lastName));
     }
 
     @Override

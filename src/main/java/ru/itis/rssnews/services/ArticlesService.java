@@ -9,4 +9,5 @@ public interface ArticlesService {
     ArticlesPage getAll(int page, boolean isOrderedByLikes, Category category);
     void addArticle(Article article);
     boolean existsByLink(String link);
+    ArticlesPage getAllByTitle(int page, String title);
 }
