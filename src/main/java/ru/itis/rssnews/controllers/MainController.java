@@ -5,16 +5,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.itis.rssnews.dto.page.ArticlesPage;
+import ru.itis.rssnews.models.Article;
 import ru.itis.rssnews.models.Category;
+import ru.itis.rssnews.models.RssSource;
 import ru.itis.rssnews.models.helpers.PageParam;
 import ru.itis.rssnews.services.ArticlesService;
 import ru.itis.rssnews.services.CategoriesService;
 
+import java.util.List;
 import java.util.Objects;
 
-// TODO: сделать поиск по title
 @Controller
 @RequiredArgsConstructor
 public class MainController {
@@ -55,6 +58,22 @@ public class MainController {
         modelMap.put("page", pageParam.getPage());
         modelMap.put("searchTitle", title);
         return "found_articles";
+    }
+
+    @GetMapping("/source/{sourceId}")
+    public String getMainPage(@RequestParam(value = "page", defaultValue = "1") PageParam pageParam,
+                              @PathVariable Long sourceId,
+                              ModelMap modelMap) {
+
+        ArticlesPage articlesPage = articlesService.getAllBySourceId(pageParam.getPage(), sourceId);
+        List<Article> articles = articlesPage.getArticles();
+        RssSource rssSource = articles.size() != 0 ? articles.get(0).getSource() : null;
+
+        modelMap.put("articles", articles);
+        modelMap.put("pagesCount", articlesPage.getTotalPagesCount());
+        modelMap.put("page", pageParam.getPage());
+        modelMap.put("rssSource", rssSource);
+        return "source_articles";
     }
 
     private void setSelectedCategoryToSession(String categoryName, HttpSession session) {

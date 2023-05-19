@@ -35,18 +35,25 @@
                     <table class="table table-hover">
                         <thead class="table-primary">
                         <tr>
-                            <th>ID</th>
+                            <th sec:authorize="hasAuthority('ADMIN')">ID</th>
                             <th>Link</th>
+                            <th></th>
                             <th sec:authorize="hasAuthority('ADMIN')">Action</th>
                         </tr>
                         </thead>
                         <tbody id="usersTbody">
                         <th:block th:each="source : ${rssSources}">
                             <tr>
-                                <td th:text="${source.id}"></td>
+                                <td sec:authorize="hasAuthority('ADMIN')" th:text="${source.id}"></td>
                                 <td>
                                     <a class="text-decoration-none" th:href="${source.source}"
                                        th:text="${source.source}"></a>
+                                </td>
+                                <td>
+                                    <a class="text-decoration-none"
+                                       th:href="@{/source/{sourceId}(sourceId=${source.id})}">
+                                        <button class="btn btn-primary btn-sm">See news</button>
+                                    </a>
                                 </td>
                                 <td sec:authorize="hasAuthority('ADMIN')">
                                     <form th:action="@{/rss/delete/{id}(id = ${source.id})}" method="post">

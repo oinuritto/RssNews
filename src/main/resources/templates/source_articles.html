@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <!-- Include Header   -->
+    <th:block th:replace="~{fragments/header :: head}"/>
+    <title>Articles for source</title>
+    <script defer type="text/javascript" th:src="@{/js/articles_likes.js}"></script>
+</head>
+<body>
+<!-- Include navbar -->
+<th:block th:replace="~{fragments/header :: navbar}"></th:block>
+
+
+<div th:if="${articles.size() != 0}" class="container">
+    <div class="text-center">
+        <h4 class="text-sm-center">Articles for source -
+            <a class="text-decoration-none"
+               th:href="${rssSource.source}"
+               th:text="${rssSource.source}">
+            </a>
+        </h4>
+    </div>
+
+    <th:block sec:authorize="isAuthenticated()">
+        <input type="hidden" class="userId" th:id="${currentUser.id}">
+    </th:block>
+    <th:block th:each="article : ${articles}">
+        <div class="card m-auto" style="width: 30rem;">
+            <div th:if="${article.imageLink != null}">
+                <img th:src="${article.imageLink}" class="card-img-top" th:alt="${article.title}">
+            </div>
+            <div class="card-body">
+                <h4 class="card-title" th:text="${article.title}"></h4>
+                <h6 class="card-subtitle mb-2 text-muted text-sm-end"
+                    th:text="'Category: ' + ${article.category.name}"></h6>
+                <h5 class="card-text" th:text="${article.description}"></h5>
+                <h6 class="card-subtitle mb-2 text-muted text-sm-end"
+                    th:text="${#dates.format(article.pubDate, 'yyyy-MM-dd HH:mm:ss')}"></h6>
+                <a th:href="${article.link}" class="btn btn-primary btn-sm">See more</a>
+                <a th:href="${article.getSource().getSource()}" class="btn btn-primary btn-sm">Go to RSS source</a>
+                <th:block>
+                    <p th:id="'liked-article-' + ${article.id}" class="btn btn-link btn-floating btn-lg like-button"
+                       role="button" data-mdb-ripple-color="dark">
+                        <input type="hidden" class="article-ids" th:id="${article.id}">
+                        <i th:id="'likedCount-article-' + ${article.id}" class="bi bi-hand-thumbs-up"
+                           th:text="${article.likes.size()}"></i>
+                        <input type="hidden" th:id="'ifLiked-article-' + ${article.id}" value="nonLiked">
+                    </p>
+                </th:block>
+            </div>
+        </div>
+        <br>
+    </th:block>
+
+    <th:block th:replace="~{fragments/footer :: pagination(url = '/source/' + ${articles[0].source.id})}"/>
+</div>
+
+<div th:if="${articles.size() == 0}" class="container d-flex align-items-center justify-content-center">
+    <div class="text-center">
+        <h1 class="display-1 fw-bold">Not found</h1>
+        <a th:href="@{/rss}" class="btn btn-primary">Back to rss sources</a>
+    </div>
+</div>
+
+<!--  Include footer-->
+<th:block th:replace="~{fragments/footer :: footer}"/>
+</body>
+</html>

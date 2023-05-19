@@ -76,6 +76,17 @@ public class ArticlesServiceImpl implements ArticlesService {
                 .build();
     }
 
+    @Override
+    public ArticlesPage getAllBySourceId(int page, Long id) {
+        PageRequest pageRequest = PageRequest.of(page - 1, defaultPageSize);
+        Page<Article> articlesPage = articlesRepository.findAllBySourceId(id, pageRequest);
+
+        return ArticlesPage.builder()
+                .articles(articlesPage.getContent())
+                .totalPagesCount(articlesPage.getTotalPages())
+                .build();
+    }
+
     private Article getArticleOrElseThrow(String link) {
         return articlesRepository.findByLink(link)
                 .orElseThrow(() -> new NotFoundException("Article with link = <" + link + "> is not found"));

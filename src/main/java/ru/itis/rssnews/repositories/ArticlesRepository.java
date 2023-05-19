@@ -26,4 +26,5 @@ public interface ArticlesRepository extends JpaRepository<Article, Long> {
     Page<Article> findAllByCategoryNameOrderByLikesDesc(String categoryName, Pageable pageable);
     boolean existsByLink(String link);
     Page<Article> findAllByTitleContainingIgnoreCase(String title, Pageable pageable);
+    Page<Article> findAllBySourceId(Long id, Pageable pageable);
 }

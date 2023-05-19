@@ -10,4 +10,5 @@ public interface ArticlesService {
     void addArticle(Article article);
     boolean existsByLink(String link);
     ArticlesPage getAllByTitle(int page, String title);
+    ArticlesPage getAllBySourceId(int page, Long id);
 }
