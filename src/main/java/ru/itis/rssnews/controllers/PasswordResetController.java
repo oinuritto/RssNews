@@ -11,6 +11,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.thymeleaf.context.Context;
 import ru.itis.rssnews.dto.PasswordDto;
 import ru.itis.rssnews.models.User;
+import ru.itis.rssnews.services.PasswordResetTokenService;
 import ru.itis.rssnews.services.UsersService;
 import ru.itis.rssnews.utils.EmailUtil;
 
@@ -22,6 +23,7 @@ import java.util.UUID;
 @Controller
 public class PasswordResetController {
     private final UsersService usersService;
+    private final PasswordResetTokenService passwordResetTokenService;
     private final EmailUtil emailUtil;
 
     @GetMapping("/forgot")
@@ -38,8 +40,14 @@ public class PasswordResetController {
             return "redirect:/password/forgot";
         }
 
+        if (passwordResetTokenService.existsNonExpiredTokenByEmail(email)) {
+            attributes.addFlashAttribute("message",
+                    "You already sent link to this email.\nFind in your mail or wait before link expires.");
+            return "redirect:/password/forgot";
+        }
+
         String token = UUID.randomUUID().toString();
-        usersService.createPasswordResetToken(email, token);
+        passwordResetTokenService.createPasswordResetToken(email, token);
 
         sendResetPasswordMail(email, token);
 
@@ -51,7 +59,7 @@ public class PasswordResetController {
     public String resetPasswordPage(Model model,
                                          @RequestParam("token") String token,
                                          RedirectAttributes attributes) {
-        String result = usersService.validatePasswordResetToken(token);
+        String result = passwordResetTokenService.validatePasswordResetToken(token);
         if (result != null) {
             attributes.addFlashAttribute("message", "Link expired or invalid.");
             return "redirect:/password/forgot";
@@ -72,7 +80,7 @@ public class PasswordResetController {
         if (bindingResult.hasErrors()) {
             return "password_reset";
         }
-        String result = usersService.validatePasswordResetToken(token);
+        String result = passwordResetTokenService.validatePasswordResetToken(token);
 
         if (result != null) {
             attributes.addFlashAttribute("message", "Link expired or invalid.");
@@ -94,6 +102,6 @@ public class PasswordResetController {
         String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
         context.setVariable("baseUrl", baseUrl);
         context.setVariable("token", token);
-        emailUtil.sendEmailWithTemplate(email, "Password Reset", "password_reset_mail", context);
+        emailUtil.sendEmail(email, "Password Reset", "password_reset_mail", context);
     }
 }

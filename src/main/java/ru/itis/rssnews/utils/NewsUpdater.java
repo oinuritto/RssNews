@@ -23,7 +23,6 @@ public class NewsUpdater {
     private final ArticlesService articlesService;
     private final RssSourcesService rssSourcesService;
 
-    @Async
     @Scheduled(fixedRate = 2 * 60 * 60 * 1000) // Задача выполняется каждые 2 часа
     public void updateNews() {
             List<RssSource> sources = rssSourcesService.getAllSources();

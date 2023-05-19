@@ -31,13 +31,9 @@ public interface UsersService {
 
     List<UserDto> getUsersByFirstNameAndLastName(String firstName, String lastName);
 
-    void createPasswordResetToken(String email, String token);
-
     boolean existsUserByEmail(String email);
 
     Optional<User> getUserByPasswordResetToken(String token);
 
     void updateUserPassword(String email, String password, String token);
-
-    String validatePasswordResetToken(String token);
 }

@@ -1,34 +1,53 @@
 package ru.itis.rssnews.utils;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
+import java.io.IOException;
+
+@Log4j2
 @Component
 @RequiredArgsConstructor
 public class EmailUtil {
-    private final JavaMailSender mailSender;
     private final SpringTemplateEngine templateEngine;
-    @Value("${spring.mail.username}")
+    @Value("${elastice.mail.username}")
     private String from;
+    @Value("${elastice.mail.apikey}")
+    private String apiKey;
+    @Value("${elastice.mail.url}")
+    private String apiUrl;
 
-    public void sendEmailWithTemplate(String to, String subject, String templateName, Context context) {
+    public void sendEmail(String to, String subject, String templateName, Context context)  {
         String htmlContent = templateEngine.process(templateName, context);
 
-        MimeMessagePreparator preparator = mimeMessage -> {
-            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-            messageHelper.setSubject(subject);
-            messageHelper.setText(htmlContent, true);
-            messageHelper.setTo(to);
-            messageHelper.setFrom(from);
-        };
+        OkHttpClient client = new OkHttpClient();
 
-        mailSender.send(preparator);
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("apikey", apiKey)
+                .addFormDataPart("subject", subject)
+                .addFormDataPart("from", from)
+                .addFormDataPart("to", to)
+                .addFormDataPart("bodyHtml", htmlContent)
+                .build();
 
+        Request request = new Request.Builder()
+                .url(apiUrl)
+                .post(requestBody)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful()) {
+                log.info("Mail sent successfully to: " + to);
+            }
+        } catch (IOException e) {
+            log.warn("Failed to send mail to: " + to, e);
+        }
     }
 }
+

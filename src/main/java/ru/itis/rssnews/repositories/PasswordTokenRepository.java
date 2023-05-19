@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.itis.rssnews.models.PasswordResetToken;
 import ru.itis.rssnews.models.User;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Transactional
@@ -16,4 +18,6 @@ public interface PasswordTokenRepository extends JpaRepository<PasswordResetToke
     @Query("SELECT prt.user FROM PasswordResetToken prt WHERE prt.token = :token")
     Optional<User> findUserByToken(String token);
     void deleteByToken(String token);
+    Optional<PasswordResetToken> findByUserEmailAndExpiryDateAfter(String email, Date date);
+    List<PasswordResetToken> findByExpiryDateBefore(Date date);
 }

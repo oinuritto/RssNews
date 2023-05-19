@@ -19,15 +19,13 @@ import ru.itis.rssnews.dto.UserDto;
 import ru.itis.rssnews.dto.page.UsersPage;
 import ru.itis.rssnews.exceptions.NotFoundException;
 import ru.itis.rssnews.exceptions.UpdateEntityException;
-import ru.itis.rssnews.models.PasswordResetToken;
-import ru.itis.rssnews.models.helpers.Role;
 import ru.itis.rssnews.models.User;
+import ru.itis.rssnews.models.helpers.Role;
 import ru.itis.rssnews.repositories.PasswordTokenRepository;
 import ru.itis.rssnews.repositories.UsersRepository;
 import ru.itis.rssnews.security.details.UserDetailsImpl;
 import ru.itis.rssnews.services.UsersService;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,7 +59,6 @@ public class UsersServiceImpl implements UsersService {
         usersRepository.save(User.builder()
                 .email(signUpDto.getEmail())
                 .password(passwordEncoder.encode(signUpDto.getPassword()))
-//                .password(signUpDto.getPassword())
                 .firstName(signUpDto.getFirstName())
                 .lastName(signUpDto.getLastName())
                 .role(Role.USER)
@@ -153,12 +150,6 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public void createPasswordResetToken(String email, String token) {
-        PasswordResetToken newToken = new PasswordResetToken(getUserOrElseThrow(email), token);
-        passwordTokenRepository.save(newToken);
-    }
-
-    @Override
     public Optional<User> getUserByPasswordResetToken(String token) {
         return passwordTokenRepository.findUserByToken(token);
     }
@@ -169,24 +160,6 @@ public class UsersServiceImpl implements UsersService {
         user.setPassword(passwordEncoder.encode(password));
         usersRepository.save(user);
         passwordTokenRepository.deleteByToken(token);
-    }
-
-    @Override
-    public String validatePasswordResetToken(String token) {
-        PasswordResetToken passToken = passwordTokenRepository.findByToken(token);
-
-        return !isTokenFound(passToken) ? "invalidToken"
-                : isTokenExpired(passToken) ? "expired"
-                : null;
-    }
-
-    private boolean isTokenFound(PasswordResetToken passToken) {
-        return passToken != null;
-    }
-
-    private boolean isTokenExpired(PasswordResetToken passToken) {
-        Calendar cal = Calendar.getInstance();
-        return passToken.getExpiryDate().before(cal.getTime());
     }
 
     private User getUserOrElseThrow(String email) {
