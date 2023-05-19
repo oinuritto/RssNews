@@ -12,7 +12,6 @@ import java.io.Serializable;
 @Entity
 @Table(name = "likes")
 public class Like {
-
     @EmbeddedId
     private LikeId id;
 

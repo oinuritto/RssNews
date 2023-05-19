@@ -1,17 +1,14 @@
 package ru.itis.rssnews.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 import java.util.List;
 
 @Builder
 @AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Data
 @Entity
 @Table(name = "articles")

@@ -13,6 +13,8 @@ import ru.itis.rssnews.repositories.ArticlesRepository;
 import ru.itis.rssnews.repositories.CategoriesRepository;
 import ru.itis.rssnews.services.ArticlesService;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ArticlesServiceImpl implements ArticlesService {
@@ -50,10 +52,12 @@ public class ArticlesServiceImpl implements ArticlesService {
     @Override
     public void addArticle(Article article) {
         Category category = article.getCategory();
-        if (!categoriesRepository.existsByName(category.getName())) {
+        Optional<Category> foundCategory = categoriesRepository.findByName(category.getName());
+
+        if (foundCategory.isEmpty()) {
             categoriesRepository.save(category);
         } else {
-            category = categoriesRepository.findByName(category.getName()).get();
+            category = foundCategory.get();
         }
 
         article.setCategory(category);

@@ -25,11 +25,6 @@ import ru.itis.rssnews.security.handlers.CustomAccessDeniedHandler;
 public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
     private final UserDetailsService userDetailsServiceImpl;
-    public static final String[] OPEN_API_PATHS = {"/v3/api-docs.yaml",
-            "/v3/api-docs/**",
-            "/swagger-ui/**",
-            "/swagger-ui.html"};
-
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -37,17 +32,14 @@ public class SecurityConfig {
                 "/css/**", "/js/**", "/img/**", "/static/**");
     }
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return
                 http
                         .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .ignoringRequestMatchers("/error", "/api/**")
+                        .ignoringRequestMatchers("/error", "/api/likes/**")
                         .and()
                         .authorizeHttpRequests()
-//                        .requestMatchers("/", "/error", "/rss", "/api/likes/**", "/403").permitAll()
-//                        .requestMatchers(OPEN_API_PATHS).permitAll()
                         .requestMatchers("/login", "/register").anonymous()
                         .requestMatchers(HttpMethod.DELETE, "/api/likes/**").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/likes/add/**").authenticated()

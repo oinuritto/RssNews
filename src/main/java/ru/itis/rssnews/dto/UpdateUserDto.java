@@ -27,14 +27,4 @@ public class UpdateUserDto {
     private String password;
 
     private String confirmPassword;
-
-//    public static UpdatedUserDto from(User user) {
-//        return UpdatedUserDto.builder()
-//                .email(user.getEmail())
-//                .firstName(user.getFirstName())
-//                .lastName(user.getLastName())
-//                .role(user.getRole())
-//                .password(user.getPassword())
-//                .build();
-//    }
 }
