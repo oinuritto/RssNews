@@ -1,3 +1,5 @@
+let non_authorized_msg = "You should log in to use likes system!";
+
 function setLike(articleId) {
     fetch('/api/likes/add/' + articleId, {
         method: "POST",
@@ -11,6 +13,8 @@ function setLike(articleId) {
                 document.getElementById("ifLiked-article-" + articleId).setAttribute("value", "liked");
                 document.getElementById("likedCount-article-" + articleId).className = "bi bi-hand-thumbs-up-fill";
                 return update(articleId);
+            } else {
+                alert(non_authorized_msg);
             }
         }).catch(error => {
         console.error('Ошибка при отправке запроса', error);
@@ -30,6 +34,8 @@ function dislike(articleId) {
                 document.getElementById("ifLiked-article-" + articleId).setAttribute("value", "nonLiked");
                 document.getElementById("likedCount-article-" + articleId).className = "bi bi-hand-thumbs-up";
                 return update(articleId);
+            } else {
+                alert(non_authorized_msg);
             }
         }).catch(error => {
         console.error('Ошибка при отправке запроса', error);
