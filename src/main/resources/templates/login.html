@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <!-- Include Header   -->
+    <th:block th:replace="~{fragments/header :: head}"/>
+    <title>Login Page</title>
+</head>
+
+<body>
+<!-- Include navbar -->
+<th:block th:replace="~{fragments/header :: navbar}"></th:block>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 mb-3">
+            <div class="card mx-auto">
+                <div class="card-header">
+                    <h3 class="card-title">Login</h3>
+                    <h6 class="card-subtitle"><a class="text-decoration-none" th:href="@{/password/forgot}">Forgot password?</a></h6>
+                    <div th:if="${errMsg}" class="text-danger">
+                        <span th:text="${errMsg}"></span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/login}" method="post">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                            <button type="submit" class="btn btn-primary mt-2">Login</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--  Include footer-->
+<th:block th:replace="~{fragments/footer :: footer}"/>
+</body>
+</html>

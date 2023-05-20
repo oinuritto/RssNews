@@ -1,0 +1,15 @@
+.container {
+    min-height: 78vh;
+    padding-top: 2%;
+}
+
+/* Scrolling dropdown menu of categories */
+.dropdown-menu.categories {
+    overflow-y: scroll;
+    max-height: 50vh;
+}
+
+/* to hide scrollbar in dropdown-menu*/
+.dropdown-menu::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
+}
