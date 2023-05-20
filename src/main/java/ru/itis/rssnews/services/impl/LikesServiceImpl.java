@@ -8,6 +8,7 @@ import ru.itis.rssnews.models.Article;
 import ru.itis.rssnews.models.Like;
 import ru.itis.rssnews.models.User;
 import ru.itis.rssnews.repositories.LikesRepository;
+import ru.itis.rssnews.services.ArticlesService;
 import ru.itis.rssnews.services.LikesService;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LikesServiceImpl implements LikesService {
     private final LikesRepository likesRepository;
+    private final ArticlesService articlesService;
 
     @Override
     public void addLike(Like like) {
@@ -24,6 +26,10 @@ public class LikesServiceImpl implements LikesService {
 
     @Override
     public void addLike(Long articleId, Long userId) {
+        if (!articlesService.existsById(articleId)) {
+            throw new NotFoundException("Article with id " + articleId + " not found.");
+        }
+
         Like.LikeId likeId = Like.LikeId.builder()
                 .articleId(articleId)
                 .userId(userId)
@@ -78,6 +84,10 @@ public class LikesServiceImpl implements LikesService {
 
     @Override
     public void deleteLikeByArticleIdAndUserId(Long articleId, Long userId) {
+        if (!articlesService.existsById(articleId)) {
+            throw new NotFoundException("Article with id " + articleId + " not found.");
+        }
+
         Like like = getLikeOrElseThrow(articleId, userId);
         likesRepository.deleteById(like.getId());
     }

@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -41,8 +40,6 @@ public class SecurityConfig {
                         .and()
                         .authorizeHttpRequests()
                         .requestMatchers("/login", "/register").anonymous()
-                        .requestMatchers(HttpMethod.DELETE, "/api/likes/**").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/likes/add/**").authenticated()
                         .requestMatchers("/profile/**", "/logout", "/rss/add").authenticated()
                         .requestMatchers( "/adminPanel/**", "/rss/delete/**").hasAuthority("ADMIN")
                         .anyRequest().permitAll()

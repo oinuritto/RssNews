@@ -91,6 +91,11 @@ public class ArticlesServiceImpl implements ArticlesService {
                 .build();
     }
 
+    @Override
+    public boolean existsById(Long id) {
+        return articlesRepository.existsById(id);
+    }
+
     private Article getArticleOrElseThrow(String link) {
         return articlesRepository.findByLink(link)
                 .orElseThrow(() -> new NotFoundException("Article with link = <" + link + "> is not found"));
