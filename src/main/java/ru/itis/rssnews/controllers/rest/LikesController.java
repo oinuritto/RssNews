@@ -140,20 +140,32 @@ public class LikesController {
         return new ResponseEntity<>(count, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get all likes of article from user")
+    @Operation(summary = "Get like of article from user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Page with likes",
+            @ApiResponse(responseCode = "200", description = "Like",
                     content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = LikeDto.class))
                     }
             ),
-            @ApiResponse(responseCode = "404", description = "Like not found")
+            @ApiResponse(responseCode = "404", description = "Like not found",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
+                    })
     })
     @GetMapping("/article/{articleId}/user/{userId}")
-    public ResponseEntity<LikeDto> getLikeByArticleIdAndUserId(@Parameter(description = "Article's id") @PathVariable Long articleId,
-                                                               @Parameter(description = "User's id") @PathVariable Long userId) {
-        LikeDto like = likesService.getLikeByArticleIdAndUserId(articleId, userId);
-        return new ResponseEntity<>(like, HttpStatus.OK);
+    public ResponseEntity<?> getLikeByArticleIdAndUserId(@Parameter(description = "Article's id") @PathVariable Long articleId,
+                                                         @Parameter(description = "User's id") @PathVariable Long userId) {
+
+
+        try {
+            LikeDto like = likesService.getLikeByArticleIdAndUserId(articleId, userId);
+            return new ResponseEntity<>(like, HttpStatus.OK);
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(ErrorResponse.builder()
+                    .status(HttpStatus.NOT_FOUND.value())
+                    .message(e.getMessage())
+                    .build(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @Operation(summary = "Delete like")
