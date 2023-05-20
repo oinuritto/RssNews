@@ -1,0 +1,44 @@
+version: '3.3'
+
+services:
+  database:
+    image:
+      'postgres:latest'
+    container_name: postgres-1
+    networks:
+      - cloud
+    ports:
+      - "5431:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgresPassword
+      - POSTGRES_DB=semester_spring
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  application:
+    image:
+      application-image
+    container_name: application-1
+    networks:
+      - cloud
+    ports:
+      - "80:8080"
+    depends_on:
+      - database
+    environment:
+      - "SPRING_DATASOURCE_USERNAME=postgres"
+      - "SPRING_DATASOURCE_PASSWORD=postgresPassword"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/semester_spring"
+      - "ELASTICE_MAIL_USERNAME=rssnewskzn@gmail.com"
+      - "ELASTICE_MAIL_APIKEY=E39069AF6A4C0330BD17514642EDA41ADA2D185D50AFBB3EB0F9FA4D392AFE66486CFE2A2912F7B6AFD39717B4D5BF56"
+      - "ELASTICE_MAIL_URL=https://api.elasticemail.com/v2/email/send"
+      - "SERVER_PORT=8080"
+
+volumes:
+  postgres_data:
+    external: true
+
+networks:
+  cloud:
+    external: true
