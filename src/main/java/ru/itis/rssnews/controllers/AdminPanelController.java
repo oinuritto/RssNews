@@ -43,7 +43,7 @@ public class AdminPanelController {
         String lastName = "";
 
         if (query.contains(" ")) {
-            lastName = splitQuery[splitQuery.length - 1];
+            lastName = query.substring(firstName.length() + 1);
         }
 
         return usersService.getUsersByFirstNameAndLastName(firstName, lastName);
