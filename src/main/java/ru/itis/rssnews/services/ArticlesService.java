@@ -11,4 +11,5 @@ public interface ArticlesService {
     boolean existsByLink(String link);
     ArticlesPage getAllByTitle(int page, String title);
     ArticlesPage getAllBySourceId(int page, Long id);
+    boolean existsById(Long id);
 }

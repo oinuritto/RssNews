@@ -6,6 +6,8 @@
     <th:block th:replace="~{fragments/header :: head}"/>
     <title>Admin Panel</title>
     <script defer type="text/javascript" th:src="@{/js/usersSearch.js}"></script>
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
 </head>
 <body>
 <!-- Include navbar -->
@@ -52,6 +54,7 @@
                                           th:action="@{/adminPanel/user/{userId}/editRole(userId=${usr.id})}"
                                           method="post">
                                         <input type="hidden" name="role" value="ADMIN">
+                                        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
                                         <button type="submit" class="btn btn-primary btn-sm" style="font-size: 0.8rem;">
                                             Make ADMIN
                                         </button>
@@ -61,6 +64,7 @@
                                           th:action="@{/adminPanel/user/{userId}/editRole(userId=${usr.id})}"
                                           method="post">
                                         <input type="hidden" name="role" value="USER">
+                                        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
                                         <button type="submit" class="btn btn-primary btn-sm" style="font-size: 0.8rem;">
                                             Make USER
                                         </button>
@@ -69,6 +73,7 @@
                                 <td>
                                     <form th:action="@{/adminPanel/user/{userId}/delete(userId=${usr.id})}"
                                           method="post">
+                                        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
                                         <button type="submit" class="btn btn-primary btn-sm">Delete
                                         </button>
                                     </form>

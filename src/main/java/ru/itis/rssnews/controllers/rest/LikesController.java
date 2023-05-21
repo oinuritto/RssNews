@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.itis.rssnews.dto.LikeDto;
+import ru.itis.rssnews.dto.ErrorResponse;
+import ru.itis.rssnews.exceptions.NotFoundException;
 import ru.itis.rssnews.services.LikesService;
 import ru.itis.rssnews.services.UsersService;
 
@@ -29,23 +31,42 @@ import java.util.List;
 public class LikesController {
     private final LikesService likesService;
     private final UsersService usersService;
+    private static final String UNAUTHORIZED_MESSAGE = "Unauthorized";
 
     @Operation(summary = "Like adding")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "202", description = "Like created"),
-            @ApiResponse(responseCode = "401", description = "Request from unauthorized user"),
+            @ApiResponse(responseCode = "401", description = "Request from unauthorized user", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "Article for like not found", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
+            })
     })
     @PostMapping("/add/{articleId}")
     public ResponseEntity<?> createLike(Authentication authentication,
                                         @Parameter(description = "Article's id") @PathVariable Long articleId) {
         // проверяем, что пользователь авторизован
         if (authentication != null && authentication.isAuthenticated()) {
-            // добавляем лайк и возвращаем успешный ответ
-            likesService.addLike(articleId, usersService.getCurrentUser().getId());
-            return ResponseEntity.accepted().build();
+            try {
+                likesService.addLike(articleId, usersService.getCurrentUser().getId());
+                return ResponseEntity.accepted().build();
+            } catch (NotFoundException e) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body(ErrorResponse.builder()
+                                .status(HttpStatus.NOT_FOUND.value())
+                                .message(e.getMessage())
+                                .build());
+            }
         } else {
             // если пользователь не авторизован, возвращаем ошибку 401
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(ErrorResponse.builder()
+                            .status(HttpStatus.UNAUTHORIZED.value())
+                            .message(UNAUTHORIZED_MESSAGE)
+                            .build());
         }
     }
 
@@ -119,39 +140,68 @@ public class LikesController {
         return new ResponseEntity<>(count, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get all likes of article from user")
+    @Operation(summary = "Get like of article from user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Page with likes",
+            @ApiResponse(responseCode = "200", description = "Like",
                     content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = LikeDto.class))
                     }
             ),
-            @ApiResponse(responseCode = "404", description = "Like not found")
+            @ApiResponse(responseCode = "404", description = "Like not found",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
+                    })
     })
     @GetMapping("/article/{articleId}/user/{userId}")
-    public ResponseEntity<LikeDto> getLikeByArticleIdAndUserId(@Parameter(description = "Article's id") @PathVariable Long articleId,
-                                                               @Parameter(description = "User's id") @PathVariable Long userId) {
-        LikeDto like = likesService.getLikeByArticleIdAndUserId(articleId, userId);
-        return new ResponseEntity<>(like, HttpStatus.OK);
+    public ResponseEntity<?> getLikeByArticleIdAndUserId(@Parameter(description = "Article's id") @PathVariable Long articleId,
+                                                         @Parameter(description = "User's id") @PathVariable Long userId) {
+
+
+        try {
+            LikeDto like = likesService.getLikeByArticleIdAndUserId(articleId, userId);
+            return new ResponseEntity<>(like, HttpStatus.OK);
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(ErrorResponse.builder()
+                    .status(HttpStatus.NOT_FOUND.value())
+                    .message(e.getMessage())
+                    .build(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @Operation(summary = "Delete like")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "202", description = "Like deleted"),
-            @ApiResponse(responseCode = "401", description = "Request from unauthorized user"),
-            @ApiResponse(responseCode = "404", description = "Like for delete not found")
+            @ApiResponse(responseCode = "401", description = "Request from unauthorized user", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "Not found liked article", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
+            })
     })
     @DeleteMapping("/article/{articleId}")
     public ResponseEntity<?> deleteLikeByArticleId(@Parameter(description = "Article's id") @PathVariable Long articleId,
                                                    Authentication authentication) {
         // проверяем, что пользователь авторизован
         if (authentication != null && authentication.isAuthenticated()) {
-            // удаляем лайк и возвращаем успешный ответ
-            likesService.deleteLikeByArticleIdAndUserId(articleId, usersService.getCurrentUser().getId());
-            return ResponseEntity.accepted().build();
+            try {
+                likesService.deleteLikeByArticleIdAndUserId(articleId, usersService.getCurrentUser().getId());
+                return ResponseEntity.accepted().build();
+            } catch (NotFoundException e) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body(ErrorResponse.builder()
+                                .status(HttpStatus.NOT_FOUND.value())
+                                .message(e.getMessage())
+                                .build());
+            }
         } else {
             // если пользователь не авторизован, возвращаем ошибку 401
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(ErrorResponse.builder()
+                            .status(HttpStatus.UNAUTHORIZED.value())
+                            .message(UNAUTHORIZED_MESSAGE)
+                            .build());
         }
     }
 }
